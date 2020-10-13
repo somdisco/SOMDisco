@@ -1,0 +1,18 @@
+# SHGR Example Data
+
+SOMDisco is packaged alongside an example dataset to showcase its training and analysis capabilities.  The SHGRWalk Data (SHGR, for short) are 128 x 128 pixel, 100-dimensional **S**ynthetic **H**yperspectral data cubes based on a **G**aussian **R**andom **W**alk across the spectral "channels".  More information about the data generation and structure of the "20-class, cov500-4000" data case included with SOMDisco can be found at the [SHGRWalk homepage](https://somdisco.github.io/SHGRWalk/output/index.html). Briefly, `library(SOMDisco)` loads a list named `SHGR` into the user's R environment with components: 
+
+* `X` the SHGR data, as a data matrix. nrows = 128 x 128 = 16,384 (number of image pixels), ncol = 100 (spectral dimension). Each row contains one spectral "signature" from each pixel of the SHGRWalk cube.  
+* `label` a character vector (length = 16,384) containing labels ("A" - "T") for each pixel of the cube. The order corresponds to the row ordering of `X`.  
+* `ctab` a data frame with columns `label` and `color` defining the mapping between unique label names ("A","B",..."T") and their associated identifying color
+* `pxl.coords` a 2-column matrix (nrows = 16,384) giving the spatial pixel coordinates ( in `(row,col)` format) for each spectra in the rows of `X` 
+* `identifier` a string identifying the specific SHGRWalk cube included with SOMDisco (there are others, as explained [SHGRWalk homepage](https://somdisco.github.io/SHGRWalk/output/index.html)). 
+
+The individual spectra of the pixels comprising each of the 20 unique classes, plotted across the 100 channels, is below: 
+```{r, echo=FALSE, fig.align='center', out.width="70%"}
+knitr::include_graphics("./figs/SGRW-100d_20class_cov500-4000-spectra.png", auto_pdf = TRUE)
+```
+
+We will utilize the SHGR data in the training and visualization showcases which follow. 
+
+

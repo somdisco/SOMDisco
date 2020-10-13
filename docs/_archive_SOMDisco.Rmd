@@ -1,0 +1,127 @@
+---
+title: "SOMDisco"
+output: 
+  html_document:
+    fig_caption: yes
+    theme: cerulean
+    highlight: tango
+    number_sections: true
+    toc: true
+    toc_float: 
+      collapsed: false
+      smooth_scroll: false
+vignette: >
+  %\VignetteIndexEntry{SOMDisco}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+<!---  old YAML header: rmarkdown::html_vignette:
+    fig_caption: yes
+    number_sections: true
+    toc: true -->
+
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(SOMDisco)
+```
+
+# SOMDisco Motivation 
+
+Several R packages exist on CRAN to train Self-Organizing Maps, most notably the Kohonen and popsom packages, which perform SOM learning more or less in accordance with Kohonen's original algorithm.  SOMDisco is intended to fill several current voids faced by SOM researchers and practitioners by offering the following: 
+
+* 
+
+# Field Glossary for the SOM Class
+
+## Lattice 
+| Variable | Where Set? | Internally Computed | Description |
+|--|---|:-:|----------|
+| som_x | initialize_SOM | F | The width of the SOM lattice (number of neurons) |
+| som_y | initialize_SOM | F | The height of the SOM lattice (number of neurons) |
+| nW | initialize_SOM | T | The total number of neurons (and prototypes) in the SOM, = som_x * som_y |
+| lattice_type | initialize_SOM | F | The lattice type, either “hex” or “grid” |
+| nu_xy | initialize_SOM<br>(via set_lattice) | T | Matrix whose rows contain the (x,y) coordinates of neurons on the SOM lattice.  Rows follow prototype ordering. |
+| nu_ij | initialize_SOM<br>(via set_lattice) | T | Matrix whose rows contain the (i=row,j=col) indices of neurons on the SOM lattice.  Rows follow prototype ordering. |
+| nu_verts | initialize_SOM<br>(via set_lattice) | T | Cube whose slices contain the vertices of each lattice tile.  Slice i contains the vertices of lattice tile i in its rows, in vertex order |
+| nu_ADJ | initialize_SOM<br>(via set_lattice) | T | Adjacency matrix of lattice neurons,  whose (i,j) entry = 1 if neurons i and j are lattice adjacent and = 0 otherwise. Dimensions are nW x nW. Rows and columns follow prototype-ordering. |
+| nu_nhblist | initialize_SOM<br>(via set_lattice) | T | An organized hierarchical list of neurons sorted by their lattice distance from each other.  nu_nhblist[[i]][[j]] contains a vector of neuron IDs that are distance j from neuron i on the lattice. |
+
+
+## Training Data 
+| Variable |  Where Set?  |  Internally Computed  |  Description  |
+|--|---|:-:|----------|
+|  d  |  initialize_SOM  |  F  |  The dimension of the training data (and prototypes)  |
+|  nX  | initialize_SOM  |  T  |  The number of training samples  |
+|  Xstats  |  initialize_SOM  |  T  |  A vector of simple statistics (min, max, 1st element, last element) used to identify the training set. Since the training data is not stored in the SOM object for space considerations, these stats are used to verify that the same data set is supplied for training, recall, etc.   |
+
+## Network Scaling 
+| Variable |  Where Set?  |  Internally Computed  |  Description  |
+|--|---|:-:|----------|
+|   netrng_ext_min  |  initialize_SOM<br>(via set_netrng)  |   F  |   The min of the input data range (the “external” range) used in network scaling. initialize_SOM sets this initially to min(X) across all dimensions. Change with set_netrng. Can vary across dimension.  |
+|   netrng_ext_max  |   initialize_SOM<br>(via set_netrng)  |   F  |   The max of the input data range (the “external” range) used in network scaling. initialize_SOM sets this initially to max(X) across all dimensions. Change with set_netrng. Can vary across dimension.  |
+|   netrng_ext_rng  |   initialize_SOM<br>(via set_netrng)  |   T  |   The range (max - min) of the external data range.  Computed internally.   |
+|   netrng_int_min  |   initialize_SOM<br>(via set_netrng)  |   F  |   The min of the network range (the “internal” range) used in network scaling. initialize_SOM sets this initially to 0. Change with set_netrng.   |
+|   netrng_int_max  |   initialize_SOM<br>(via set_netrng)  |   F  |   The max of the network range (the “internal” range) used in network scaling. initialize_SOM sets this initially to 1. Change with set_netrng  |
+|   netrng_int_rng  |   initialize_SOM<br>(via set_netrng)  |   T  |   The range (max - min) of the internal data range.  Computed internally.   |
+
+## SOM Prototypes
+| Variable |  Where Set?  |  Internally Computed  |  Description  |
+|--|---|:-:|----------|
+|   W  |   initialize_SOM<br>(via set_W_runif)<br>train_SOM<br>(via update_W)  |   T  |   The prototype matrix (rows in neuron order, dim = nW x d). initialize_SOM sets this initially to random uniform values occupying 10% of the total internal network range, centered at the midpoints between internal min/max.  Can reinitialize by calling set_W_runif. Can set a specific seed for random sampling by issuing a “set.seed()” command in R prior to calling set_W_runif. Can set to specific values via set_W.    |
+|   p  |   initialize_SOM<br>(via set_p_equal)<br>train_SOM<br>(via update_p)  |   T  |   Vector of winning frequencies used in DeSieno’s CSOM algorithm (length = nW). initialize_SOM sets these initially to 1/nW by calling set_p_equal. Can set to specific values via set_p   |
+|   bias  |   NA  |   T  |   Vector of biases used in DeSieno’s CSOM algorithm (length = nW). These are never stored directly in the SOM object, but instead computed according to the CSOM formula (from p & gamma).    |
+
+## Learning Rate Annealing
+| Variable |  Where Set?  |  Internally Computed  |  Description  |
+|--|---|:-:|----------|
+|   LRAS  |   initialize_SOM (via set_LRAS)  |   F  |   The Learning Rate Annealing Schedule. The SOM object stores this internally as a c++ std::map (for quick lookup during training), but the LRAS can be accessed (via get_LRAS) or modified (via set_LRAS) as an R data frame. The data frame must have columns named “t”, “alpha”, “beta”, “gamma”, “sigma”.  “t” should be a vector of learning steps at which the learning rates are changed. Each element of the parameter columns (alpha - sigma) defines the rates which are valid up to (but not including) the corresponding training step t. See DeSieno’s algorithm for explanation of each learning parameter.   |
+|   alpha  |     |   T  |   At the beginning of each training step, the training age is incremented by 1 and the effective learning rates (alpha, beta, gamma, sigma) are extracted from LRAS and stored internally for quick access.    |
+|   beta  |     |   T  |     |
+|   gamma  |     |   T  |     |
+|   sigma  |     |   T  |     |
+|   nhb_decay  |   train_SOM (via get_nhb_decay)  |   T  |   The organization of a trained SOM arises from cooperative updating of neurons neighboring the BMU during training.  nhb_decay is a vector containing multiplicative factors applied to the updating of these neighboring neurons. Its length is controlled by the learning parameter sigma, which sets the maximum lattice radius to which cooperative updating applies.  Element nhb_decay[r] contains the multiplicative factor used when updating prototypes whose neurons are within radius r of the BMU.  At each training step, the elements of nhb_decay are set automatically via a logistic decay function spanning lattice radius = 0 to lattice radius = (sigma(t) + 1), with the update factor for the (sigma(t) + 1) term being nearly (but not exactly, due to the continuity of the logistic function) = 0.    |
+
+## SOM Training 
+| Variable |  Where Set?  |  Internally Computed  |  Description  |
+|--|---|:-:|----------|
+|   age  |   train_SOM   |   T  |   The current age of the SOM (the number of training steps that have been performed thus far).  |
+|   train_order  |   train_SOM (or set_train_order)  |   T (F)  |   A vector of the indices of training data that were presented to the network during training, in order (thus train_order[1] contains the row number of the training data X which was drawn during training step 1, and so on). During normal use, the samples should be drawn randomly (which train_SOM does by default, and stores a record of the drawing order here). If a specific training order is desired (for, e.g., experimental purposes), this can be set by calling set_train_order prior to calling train_SOM (which forces data presentation during training to follow the prescribed ordering).  If a specific training order is set, it is only valid during the subsequent call to train_SOM; if multiple rounds of training are performed, each with a desired training order, then set_train_order must be called again prior to each call to train_SOM.   |
+|   user_train_order  |   initialize_SOM (or set_train_order)  |   F  |   A boolean indicating whether a user-specified training order has been supplied.  This is initialized = F during initialize_SOM, and set = T during a call to set_train_order. Regardless of its value, it is set = F at after calling train_SOM.   |
+|   mtr_freq  |   set_monitoring_freq  |   F  |   The number of incremental steps at which the monitoring of SOM training is computed & stored.  If = 0 then no monitoring is performed.   |
+|   mtr_age  |   train_SOM (via monitor_SOM)  |   T  |   A vector of the training ages at which monitoring snapshots were taken during SOM training. Populated automatically according to the value of mtr_freq   |
+|   mtr_RMSQE  |   train_SOM (via monitor_SOM)  |   T  |   A matrix (nrow = length(mtr_age), ncol = nW+1) containing the Root Mean Squared Error of the quantization of the data by each prototype (the Root Mean Quantization Error at the prototype level). The last (nW + 1) column contains the RMSQE of the quantization over all prototypes.   |
+|   mtr_QSI  |   train_SOM (via monitor_SOM)  |   T  |   A vector (length = length(mtr_age)) of the Quantization Stability Index computed during each monitoring snapshot. The QSI at any monitoring step is the proportion of data samples that have switched BMUs from previous monitoring step (by convention, QSI at the initial monitoring step = NA).    |
+|   mtr_Entropy  |   train_SOM (via monitor_SOM)  |   T  |   A vector (length = length(mtr_age)) of the Normalized Entropy of the SOM mapping at each monitoring step.   |
+
+
+## SOM Recall
+| Variable |  Where Set?  |  Internally Computed  |  Description  |
+|--|---|:-:|----------|
+|   nBMU  |   initialize_SOM, set_nBMU  |   F  |   The number of BMUs that are calculated and recorded during SOM recall. Default = minimum = 2, which is set during initialize_SOM. Can be changed to > 2 by calling set_nBMU  |
+|   BMU  |   recall_SOM  |   T  |   Matrix (nrow = nX, ncol = nBMU) of BMUs of the training data. The BMU is stored as the neuron ID. Column 1 = 1st BMU, column2 = 2nd BMU, etc.  |
+|   CADJ  |   recall_SOM  |   T  |   The CADJ matrix (nrow = nW, ncol = nW) computed during SOM recall   |
+|   CONN  |   recall_SOM  |   T  |   The CONN matrix, which is not stored but computed from the CADJ matrix as requested.   |
+|   RF_size  |   recall_SOM  |   T  |   A vector (length = nW) listing the sizes of each prototype’s Receptive Field (i.e., the number of data vectors mapped to each prototype).    |
+|   Entropy  |   recall_SOM (via calc_Entropy)  |   T  |   The normalized entropy (in bits) of the SOM mapping.   |
+|   RF_members  |   recall_SOM  |   T  |   A list (length = nW) containing the indices of the training data mapped to each prototype during SOM recall (so, length(RF_members[[i]]) = RF_size[i]).  If a prototype’s RF is empty then the corresponding element of RF_members is also empty.   |
+|   SQE  |   recall_SOM  |   T  |   A vector (length = nX) of the Squared Quantization Error resulting from quantizing each data vector by its BMU.  |
+|   RF_label  |   set_RF_label  |   T  |   A character vector (length = nW) of the plurality data label of each prototype.  A prototype’s label is computed as the plurality label of the data mapped to it.  This is only valid if the training data have associated labels.    |
+|   fences  |   recall_SOM (via set_lattice_fences)  |   T  |   A data frame whose rows detail the U-matrix fences between neighboring lattice prototypes.  Columns i and j define the neuron IDs which each fence separates, columns x0,y0,x1,y0 give the lattice coordinates of the endpoints of each fence, and column value = the (squared) Euclidean distance between prototypes i and j.    |
+
+## Control
+| Variable |  Where Set?  |  Internally Computed  |  Description  |
+|--|---|:-:|----------|
+|   parallel  |   set_parallel  |   F  |   Controls whether all computations are performed in parallel. Can change threading options via RcppParallel::setThreadOptions()  |
+|   is_netrng_set  |   initialize_SOM (via set_netrng)  |   T  |   Boolean indicating whether set_netrng has been called.   |
+|   is_protos_init  |   initialize_SOM (via set_W_runif), set_W  |   T  |   Boolean indicating whether set_W_runif or set_W has been called  |
+|   is_winfrq_init  |   initialize_SOM (via set_p_equal), set_p  |   T  |   Boolean indicating whether set_p_equal or set_p has been called  |
+|   is_trained  |   train_SOM  |   T  |   Boolean indicating whether train_SOM has been called  |
+|   is_recalled  |   recall_SOM  |   T  |   Boolean indicating whether recall_SOM has been called  |

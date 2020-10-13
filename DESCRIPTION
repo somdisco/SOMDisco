@@ -1,0 +1,25 @@
+Package: SOMDisco
+Type: Package
+Title: Training and Visualizing a Conscience Self-Organizing Map 
+Version: 1.0
+Date: 2020-04-25
+Author: Josh Taylor
+Maintainer: Josh Taylor <josh@somdisco.com>
+Description: SOMDisco makes the Conscience-SOM algorithm of DeSieno (1988) available to the machine learning community, leveraging Rcpp, RcppArmadillo and RcppParallel for speed.  Additionally, extended visualizations of learned SOM products are provided to faciliate CSOM-based cluster extraction.  
+License: GPL (>= 2)
+Imports: 
+    Rcpp (>= 1.0.1), 
+    stringr, 
+    igraph, 
+    dplyr, 
+    gtools, 
+    Rdpack
+LinkingTo: Rcpp, RcppArmadillo, RcppParallel
+RoxygenNote: 7.1.1
+Suggests: 
+    knitr,
+    rmarkdown, 
+    TopoRNet
+VignetteBuilder: knitr
+RdMacros: Rdpack
+LazyData: true

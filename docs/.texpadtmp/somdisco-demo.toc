@@ -1,0 +1,24 @@
+\contentsline {chapter}{Preface}{5}{chapter*.2}%
+\contentsline {chapter}{\numberline {1}Conscience SOM}{7}{chapter.1}%
+\contentsline {chapter}{\numberline {2}SHGR Example Data}{9}{chapter.2}%
+\contentsline {chapter}{\numberline {3}SOM Initialization}{11}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Lattice Quantitites}{12}{section.3.1}%
+\contentsline {section}{\numberline {3.2}Network Scaling}{13}{section.3.2}%
+\contentsline {section}{\numberline {3.3}Prototype Initialization}{14}{section.3.3}%
+\contentsline {section}{\numberline {3.4}Win Frequency Initialization}{15}{section.3.4}%
+\contentsline {section}{\numberline {3.5}Learning Rate Initialization}{15}{section.3.5}%
+\contentsline {chapter}{\numberline {4}SOM Learning}{19}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Network Training}{19}{section.4.1}%
+\contentsline {section}{\numberline {4.2}Network Recall}{22}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}BMU - SOM Forwad Map}{22}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}RF\_members - SOM Reverse Map}{23}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}RF\_size}{24}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.4}Quantization Error}{24}{subsection.4.2.4}%
+\contentsline {subsection}{\numberline {4.2.5}Entropy}{24}{subsection.4.2.5}%
+\contentsline {subsection}{\numberline {4.2.6}U-Matrix Fences}{25}{subsection.4.2.6}%
+\contentsline {subsection}{\numberline {4.2.7}CADJ \& CONN}{25}{subsection.4.2.7}%
+\contentsline {section}{\numberline {4.3}Recalling Labeled Data}{26}{section.4.3}%
+\contentsline {section}{\numberline {4.4}Monitoring Learning}{27}{section.4.4}%
+\contentsline {section}{\numberline {4.5}Parallel Processing}{30}{section.4.5}%
+\contentsline {section}{\numberline {4.6}Saving \& Loading}{30}{section.4.6}%
+\contentsline {chapter}{\numberline {5}A Complete Example with Visualizations}{31}{chapter.5}%

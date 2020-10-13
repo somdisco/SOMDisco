@@ -1,0 +1,149 @@
+# SOM Initialization
+
+SOMDisco is built around the internal C++ class `SOMOBJ`, which is a header-only class (found in the `/inst/include/` source package) envisioned to be entirely portable for future integration with other SOM-related projects. This section will demonstrate how to interact with the class fields and methods to achieve SOM training (a complete list of the fields and methods of this class exposed to the user by the SOMDisco package can be found with `?SOM`).  All methods are documented in the usual manner, with help functionality available via `?<method_name>`.  
+
+To get started with SOM training we must instantiate an empty `SOM` object, then initialize it with our training data and desired lattice size and topology via the method `initialize_SOM`.  
+```{r, eval=T, echo=F}
+set.seed(100)
+```
+```{r, ck-initSOM, echo=T, eval=T, collapse=T}
+library(SOMDisco)
+mysom = SOM$new()
+mysom$initialize_SOM(SHGR$X, 20, 20, "hex")
+```
+The arguments to `initialize_SOM` are, in order: the matrix with training data in rows, the desired som lattice width and height (number of neurons along each dimension) and the desired lattice type, which can be either `"hex"` for hexagonal lattices or `"grid"` for rectangular lattices.  Internally, `initialize_SOM` calls several other methods to set required (and internally calculated) quantities related to the SOM lattice, and default parameters for network scaling, prototype initialization, and learning rate annealing.  The sample size `nX` and data dimension `d` are also stored during this call.  
+
+## Lattice Quantitites 
+Lattice quantities are fields that generally begin with `nu_*` (by our convention, lattice neurons are represented by lower Greek $\nu$).  These fields can be examined via the `$` operator of of the instantiated SOM object:
+
+```{r, ck-examine-lattice, echo=T, eval=T, collapse=T}
+# The lattice width, height, and type, respectively 
+mysom$som_x
+mysom$som_y
+mysom$lattice_type
+
+# The total number of neurons / prototypes in the SOM. 
+# For hexagonal lattices, this number will be > som_x*som_y
+mysom$nW
+
+# The (x,y) coordinates of the neurons on the SOM lattice
+str(mysom$nu_xy)
+
+# The (row,col) coordinates of the neurons on the SOM lattice. 
+# These differ from their (x,y) coordinates if lattice_type = 'hex'
+str(mysom$nu_ij)
+
+# A binary adjacency matrix representing the topology of neurons on the lattice
+str(mysom$nu_ADJ)
+
+# The (x,y) coordinates of the vertices of each lattice tile are stored 
+# in a 3d cube whose slices follow neuron ordering. 
+str(mysom$nu_verts)
+# e.g., the vertices of the lattice tile centered at the first neuron are: 
+mysom$nu_verts[,,1]
+
+# A list giving, for all neurons, the indices of others neurons that are 
+# within a certain lattice geodesic distance: 
+length(mysom$nu_nhblist)
+
+# The vector nu_nhblist[[i]][[j]] contains indices of neurons that are 
+# within geodesic lattice distace j-1 of neuron i. 
+# ex., these neurons are within lattice distance = 1 of the first lattice neuron: 
+mysom$nu_nhblist[[1]][[2]]
+```
+The above quantities are set by the method `set_lattice`, but this should rarely need to be called on its own (it is called internally by `initialize_SOM`).  All containers storing neuron and prototype quantities are ordered such that the first element (or row, or slice, as applicable) corresponds to the neuron at the bottom left of the SOM lattice. Ordering proceeds across the rows of the lattice so that the last element (row, slice) corresponds to the neuron at the top right of the SOM.  
+```{r, ck-SHGRSOMneuronorder, eval=T, echo=F, collapse=T}
+vis_som_tiles(SOM = mysom, add = F, active = F)
+vis_som_annotate(SOM = mysom, add = T, text = 1:mysom$nW, text.cex = 0.76, active = F, text.col = tableau20("blue"), text.font = 2)
+```
+
+This is known as **neuron ordering**
+
+## Network Scaling 
+The **external network range** is the apparent range of the training data. Internally, the SOM prototypes are stored in an **internal" network range**, which is necessary to stabilize and accelerate the training process.  Both BMU selection and prototype updates are performed in the internal network range. During training, data are mapped (linearly) from the external to internal range for presentation to the network. `initialize_SOM` calls the method `set_netrng` internally, which sets the min/max of both the external and internal network ranges needed for this mapping to their defaults (which is the apparent dimension-wise range of the training data for the former, and [0,1] for the latter):  
+```{r, ck-netrng-vars, eval=T, echo=T, collapse=T}
+# The default values stored 
+str(mysom$netrng_ext_min)
+str(mysom$netrng_ext_max)
+mysom$netrng_int_min
+mysom$netrng_int_max
+```
+The default network scalings can be changed manually by calling `set_netrng` at any point prior to training.  See its help for more information.
+
+Once the network ranges are set, data can be mapped from external to internal network ranges (or vice-versa) via the methods `map_to_netrng` and `map_from_netrng`, both of which are parallelized.  For example, the entire training set can be mapped to the internal network range via: 
+```{r, ck-netrng-map-to, eval=T, echo=T, collapse=T}
+range(SHGR$X)
+mapped_training_data = mysom$map_to_netrng(SHGR$X)
+range(mapped_training_data)
+```
+
+Commonly, the learned SOM prototypes would need to be extracted from the SOM object and returned to external range for direct comparison with the data. This can be achived by: 
+```{r, ck-netrng-map-from, eval=T, echo=T, collapse=T}
+range(mysom$W)
+mapped_prototypes = mysom$map_from_netrng(mysom$W)
+range(mapped_prototypes)
+```
+
+## Prototype Initialization 
+The SOM prototype weights are stored in the rows of the `nW x d` prototype matrix `W`: 
+```{r, ck-wshow, eval=T, echo=T, collapse=T}
+str(mysom$W)
+```
+`initialize_SOM` calls the method `set_W_runif` automatically, which initializes the prototypes to random uniform values over the middle 10% of the internal network range.  If random seeding of these values is desired for reproducibility, this method should be re-invoked immediately after a call to R's `set.seed`: 
+```{r, ck-wrunif, eval=T, echo=T, collapse=T}
+set.seed(123)
+mysom$set_W_runif()
+```
+Custom prototype initializations are supported by the general method `set_W`, which allows the user to set a desired prototype weight matrix (which must have conforming dimensions: nrows = `nW` and ncols = `d`) Here, we set them to random standard normals for demo purposes: 
+```{r, ck-wset, eval=T, echo=T, collapse=T}
+rnorm_protos = matrix(rnorm(mysom$nW*mysom$d), nrow=mysom$nW, ncol=mysom$d)
+mysom$set_W(rnorm_protos)
+```
+A warning is issued if the prototype matrix contains values outside the internal network range.  Custom initializations will likely need to be mapped to internal range prior to setting: 
+```{r ck-wset-scale, eval=T, echo=T, collapse=T}
+rnorm_protos = mysom$map_to_netrng(rnorm_protos)
+mysom$set_W(rnorm_protos)
+```
+```{r, eval=T, echo=F}
+set.seed(100)
+mysom$set_W_runif()
+```
+
+## Win Frequency Initialization 
+In addition to the prototypes themselves, DeSieno's CSOM algorithm introduces another learned quantity to facilitate a maximum-entropy SOM mapping: the prototype win frequencies, which are stored in the SOM object in the vector `p`.  The `p` control the CSOM prototype `bias`, which affects the competitive stage of BMU selection during SOM training. `initialize_SOM` automatically calls the method `set_p_equal`, which sets all prototype win frequences to the value `1 / nW`.  If desired, other initializations can be achieved via the method `set_p`, which takes a user-specified vector of win frequencies:  
+```{r, ck-setp, eval=T, echo=T, collapse=T}
+new_p = runif(mysom$nW)
+mysom$set_p(new_p)
+```
+
+## Learning Rate Initialization 
+All CSOM learning rates should be annealed over time. Annealing is controlled by the internally stored data frame `LRAS` (or Learning Rate Annealing Schedule), which has columns `t` (setting the cumulative number of training steps over which the given rates are valid), `alpha` (controlling the strength of the prototype updates), `beta` (controlling the strength of win frequncy updates), `gamma` (controlling the influence of the win frequences to the CSOM bias), and `sigma` (controlling the lattice neighborhood size over which prototype updates occur). `initialize_SOM` calls the stand-alone function `default_LRAS` by default, which populates an annealing schedule based solely on the training sample size: 
+```{r, ck-default-LRAS, eval=T, echo=T, collapse=T}
+default_LRAS(nX = mysom$nX)
+```
+Users can check the current annealing schedule of the SOM object via the method `get_LRAS` and set it to new values with `set_LRAS`, which takes a data frame of the above form as input.  For example, the below will increase the `alpha` values for all training steps by 10%: 
+```{r, ck-set-LRAS, eval=T, echo=T, collapse=T}
+new_LRAS = mysom$get_LRAS()
+new_LRAS$alpha = 1.10 * new_LRAS$alpha 
+mysom$set_LRAS(new_LRAS) 
+```
+At every training step the currently applicable learning rates (based on the SOM's age and the LRAS schedule) are extracted from the LRAS data frame and stored in the following fields by the method `update_learning_rates`: 
+```{r, ck-alphabeta, eval=T, echo=T, collapse=T}
+mysom$alpha
+mysom$beta
+mysom$gamma
+mysom$sigma
+```
+The parameter `sigma` controls the size of the (lattice) neighborhood (of the prevailing BMU) in which prototypes are updated during each training step. The strength of neighbor updates decreases with their lattice distance from the BMU; the prototypes of any neurons which are greater than `sigma` away from the BMU will not be updated. The strength of updates to prototype whose neurons are within a `sigma` lattice radius of the BMU decreases exponentially with this lattice distance. This factor is stored in the SOM object as the parameter `eta`, which is a vector of length `sigma + 1`. The vector element `eta[r]` stores a multiplicative coefficient applied to the updates of those prototypes which are distance `r-1` from the BMU.  
+```{r, ck-eta, eval=T, echo=T, collapse=T}
+mysom$eta
+```
+`eta` is re-calculated any time the effective `sigma` value is changed (annealed) during training.  To enforce the organization of the SOM, `eta` always  = 1 for the BMU and its immediate lattice neighbors. `eta` is calculated via the method `calc_eta`, which should rarely need to be called on its own.  
+
+Of note, Kohonen's original prototype algorithm (i.e, without DeSieno's Conscience modification) can be achieved by setting `beta` and `gamma` to 0 and annealing a larger `sigma` radius over time.  
+
+
+
+
+
+

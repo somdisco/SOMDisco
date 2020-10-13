@@ -1,0 +1,6 @@
+useDynLib(SOMDisco, .registration=TRUE)
+exportPattern("^[[:alpha:]]+")
+import(Rcpp)
+#importFrom(Rcpp, evalCpp)
+importFrom(RcppParallel, RcppParallelLibs) # for parallelworker 
+importFrom(Rdpack,reprompt) # for references 

@@ -1,0 +1,224 @@
+# SOM Learning
+
+## Network Training
+
+While several methods exposed to the user participate in SOM training, the main method (and, typically, the only method needing to be called) for SOM training, is `train_SOM`.  As the `SOM` class was intetionally designed to not store the training data (to avoid duplicate memory occupation of larger training sets), the matrix of training data must be passed to this method. It should be the same data matrix supplied when calling `initialize_SOM` (internal checks will verify this, and return a runtime error if deviations are deteced).  The following command performs 100,000 training steps on an SOM object previously initialized to learn the example SHGR data. Status information is automatically printed to the R console. 
+```{r, eval=T, echo=F}
+set.seed(1001)
+```
+```{r, ck-train, eval = T,echo=T, collapse=T}
+mysom$train_SOM(100000, SHGR$X)
+mysom$age 
+```
+Internally, `train_SOM` calls the methods `update_W` and `update_p`, which perform updates to the prototype matrix `W` and the CSOM win frequencies `p` at each training step. These methods are exposed to the user, but should not be called separately independently.  The `age` field stores the number of training steps that have been performed during the life of the instantiated SOM object.   Additional training can be performed at any time by re-invoking the `train_SOM` method. Here, we train the above SOM for another 25,000 steps: 
+```{r, ck-train2, eval=T, echo=T, collapse=T}
+mysom$train_SOM(25000, SHGR$X)
+mysom$age
+```
+Training should proceed until the user is satisfied with the SOM's prototype development and neuron lattice organization.  The learned SOM prototype vectors can be extracted from the SOM object via the `W` field, and should be mapped from internal to external network range if direct comparison to their representative data vectors is desired. Here, we extract the prototypes after the cumulative 125,000 learning steps performed above: 
+```{r, ck-extractW, eval=T, echo=T, collapse=T}
+W125k = mysom$W 
+# Return to external network (i.e, data) range 
+W125k = mysom$map_from_netrng(mysom$W)
+```
+
+Standard online (i.e, not batch) SOM training requires random-order presentation of training data to the network at each training step. A user-specified presentation order for training can be achieved by calling the method `set_train_order` just prior to invoking `train_SOM`.  `set_train_order` takes a vector of data indices (of length `nsteps`), which sets the order of the data picked for presentation to the network for the next `nsteps` training steps.  Its input should be 1-based row indices of the training data matrix.  Here, we train the above SOM for an additional 10,000 steps where data presentation to the network follows a spefic order: 
+```{r, ck-trainorder, eval=T, echo=T, collapse=T}
+train_order = 1:10000
+mysom$set_train_order(train_order)
+mysom$train_SOM(10000, SHGR$X)
+mysom$age
+```
+If a specific training order is supplied the number of steps argument to `train_SOM` is ignored, and the SOM is trained for `nsteps = length(train_order)`.  Setting a training order is uncommon, useful mostly for experimentation and testing. 
+
+More commonly a user may wish to retain random presentation of data to the network while also enforcing reproducibility. This can be achieved by calling R's `set.seed` function just prior to `train_SOM`: 
+```{r, ck-trainseed, echo=T, eval=T, collapse=T}
+set.seed(1001)
+mysom$train_SOM(10000, SHGR$X)
+mysom$age
+```
+
+
+## Network Recall {#secRecall}
+
+After training, the entire training set should be **recalled** through the SOM, via the method `recall_SOM`, which produes additional useful products of SOM learning. A call to `train_SOM` automatically ends with a recall, but the recall function is exposed to the user for completeness. Again, it must be given the entire training data matrix (which should match that supplied during `initialize_SOM` and `train_SOM`): 
+```{r, ck-recall, eval=T, echo=T, collapse=T}
+mysom$recall_SOM(SHGR$X)
+```
+A recall populates several fields related to the SOM mapping, as described below. 
+
+### BMU - SOM Forwad Map 
+The BMU -- or **B**est **M**atching **U**nit -- of a data vector $x_s$ is the learned prototype index $j^*$ satisfying
+$$ j^* = \arg\min_{j} \, d_E(w_j, x_s)^2 - b_j$$
+where $d_E(\cdot,\cdot)^2$ is squared Euclidean distance between its vector arguments and $b_j$ is the learned per-prototype CSOM bias.  For a variety of reasons it is useful to calculate and store at least the first and second BMUs (denoted BMU1 and BMU2) for each datum. In general, $\text{BMU}[k](x_s)$ = the k-th Best Matching Unit (prototype) for the datum indexed by $s$. The field `nBMU` controls the number of BMUs computed and stored during recall, and can be set by the method `set_nBMU` prior to recall. A default `nBMU = 2` is set during a call to `initialize_SOM`. Here, we change the number of BMUs to 3, and repeat the recall: 
+```{r, ck-nbmu, eval=T, echo=T, collapse=T}
+mysom$set_nBMU(3)
+mysom$recall_SOM(SHGR$X)
+```
+Note that `nBMU` must be $\geq 2$. The BMU information is stored in the field `BMU`, which is a matrix (nrows = `nX`, ncols = `nBMU`) whose (i,j) element gives the j-th BMU index (i.e., the j-th closest prototype) for the datum in row i of the training data matrix.  This information can be access via 
+```{r, ck-bmu, eval=T, echo=T, collapse=T}
+head(mysom$BMU)
+```
+`BMU` stores the *forward* SOM mapping; that is, the mapping produced from the network *input space* (i.e., data space, or $\mathbb{R}^d$), to the network *output space* (i.e, the neurons on the SOM lattice).  
+
+### RF_members - SOM Reverse Map 
+
+The *reverse* SOM mapping is also stored during `recall_SOM` in the field `RF_members`, where the prefix "RF" stands for **R**eceptive **F**ield . This field identifies the mapping from SOM *output space* to *input space*, represented by a list of `length = nW` whose i-th entry is a vector of the 1-based data indices (rows of the training data matrix) for whom prototype i is BMU1. For example, the data indices in the Receptive Field of prototype index 10 can be accessed via 
+```{r, ck-rfmembers, eval=T, echo=T, collapse=T}
+mysom$RF_members[[10]]
+```
+While CSOM attempts an equiprobable quantization of the entire training set by the prototypes, some prototypes will have empty Receptive Fields (meaning they do not quantize any data). If prototype $j$'s Receptive Field is empty, then `RF_members[[j]]` is an empty vector (of length = 0).
+
+### RF_size
+
+The size of a prototype's receptive field is the number of datum it quantizes (the size of `RF_members[[j]]`).  This information is stored in the field `RF_size`, accessible via
+```{r, ck-rfsize, eval=T, echo=T, collapse=T}
+head(mysom$RF_size, n=10)
+```
+Note that `sum(RF_size) = nX` (all data are represented by *some* prototype, hence the sum of the sizes of all prototype's Receptive Fields must equal the training sample size). `RF_size` is useful both in analysis and visualization, as large deviations in Receptive Field size between neighboring lattice neurons can indicate cluster boundaries or pattern transitions on the SOM.
+
+### Quantization Error
+
+The distance between a datum $x_s$ and its BMU $j^*$ represents the Quantization Error induced by quantizing $x_s$ by $w_{j^*}$. These (squared) distances are computed during BMU selection and stored in the field `SQE`, which is a vector (length = `nX`) of the **S**quared **Q**uantization **E**rror arising from the SOM mapping, accessible via 
+```{r, ck-sqe, eval=T, echo=T, collapse=T}
+str(mysom$SQE)
+```
+
+
+### Entropy 
+
+The normalized entropy of the forward SOM mapping is stored in the field `Entropy`. The discrete representation of the manifold from which the training data was drawn drives this entropy calculation, defined as
+$$ \text{Entropy} = \frac{1}{\log_2(nW)} \sum\limits_{j=1}^{nW} \frac{\text{RF\_size}_j}{nX} \times \log_2\left( \frac{\text{RF\_size}_j}{nX} \right)$$
+The above is normalized so that $0 \leq \text{Entropy} \leq 1$, and $\text{Entropy} = 1$ means all prototypes quantize the same number of training data vectors.  The normalized entropy of the current SOM mapping is accessible via 
+```{r, ck-entropy, eval=T, echo=T, collapse=T}
+mysom$Entropy
+```
+
+### U-Matrix Fences 
+
+The U-Matrix [@UMatrix] and mU-Matrix [@MerenyiJainVillmann] visualizations require computing distances between all prototypes whose neurons are lattice-adjacenct. This is done automatically during `recall_SOM` using the learned prototype vectors in `W` and the lattice adjacency matrix `nu_ADJ`. The results are stored in the field `fences`, which is a data frame whose rows represent individual fence information of the form 
+```{r, ck-fences, eval=T, echo=T, collapse=T}
+head(mysom$fences)
+```
+The columns `i` and `j` give the two neurons (their indices) which are separated by the fence in each row; the columns `x0`, `y0`, `x1`, `y1` give the $(x,y)$ coordinates of the endpoints of each fence (as visualized on the lattice); the `value` column stores the squared Euclidean distance between prototypes $W_i$ and $W_j$.  This data frame can be populated by a separate call to method `set_lattice_fences` but this is generally unnecessary as it is done automatically in `recall_SOM`.  
+
+### CADJ & CONN 
+
+The CADJ matrix [@TasdemirMerenyi2009] is a weighted adjacency matrix of SOM prototypes (neurons) whose $(i,j)$ elements are defined by 
+$$ \text{CADJ}_{ij} = \#\{x_s \, : \, BMU1(x_s)=i \text{ and } BMU2(x_s)=j \}. $$
+Thus, the matrix entries count the number of data vectors for whom prototype $i$ is first-BMU and $j$ is second-BMU.  This matrix, when visualized on the SOM lattice, is useful for inferring the topological (dis-)connectivities of the manifold underlying the data $X$ in $\mathbb{R}^d$. It is accessible via the `CADJ` field of a recalled SOM object: 
+```{r, ck-cadj, eval=T, echo=T, collapse=T}
+str(mysom$CADJ)
+```
+Its symmetrized version, called CONN, is also accessible. Since $CONN = CADJ + CADJ^T$ it is never stored in the SOM object, merely recreated upon demand. As such, CONN is accessible by calling the `CONN` *method* (not field): 
+```{r, ck-conn, eval=T, echo=T, collapse=T}
+str(mysom$CONN())
+```
+
+
+## Recalling Labeled Data 
+
+If the training data possesses associated discrete labels (such as cluster or class membership) it is often helpful to propagate these labels through the forward SOM mapping (which is known as "labeling the prototypes") to assess the organization of the lattice, determine the quality of the labels, or both. *If* the labels are meaningful (such that they define genuinely distinct data classes or clusters), and *if* SOM learning is adequate (i.e., performed correctly over enough training steps), then one expects an organization of prototype labels on the lattice.  Propagation of data labels through the SOM is achieved by the method `set_RF_label`, which takes a vector of character labels, with one entry for every row of the training data $X$.  Using the labels of the example SHGR data stored in `SHGR$label`, label propagation is performed via 
+```{r, ck-setrflabel, echo=T, eval=T, collapse=T}
+mysom$set_RF_label(SHGR$label)
+```
+The above method sets two different fields of the `SOM` object:  
+
++ `RF_label_dist` is a list (length = `nW`) of named integer vectors representing the distribution (contingency count) of the labels mapped to each prototype's Receptive Field.  The `names` attribute of the vector stores the label whereas the vector elements store the associated count. Obviously, the sum of this vector equals the corresponding `RF_size`. 
++ `RF_label` is a character vector (length = `nW`) of the "winning label" in each RF, which is the plurality winning label of each RF's distribution (found in `RF_label_dist`). The plurality winner for a RF is the label with highest contingency count.  
+
+For example, the table of label counts and the plurality label of the first prototype in the SHGR SOM are: 
+```{r, ck-rflabel, echo=T, eval=T, collapse=T}
+mysom$RF_label_dist[[1]]
+mysom$RF_label[1]
+```
+These fields are primarily useful for label visualization, discussed in Section \@ref(secVis)? The SOM object must be trained (and recalled) prior to calling `set_RF_label`.  
+
+
+## Monitoring Learning
+
+While there is no universal criteria to determine the number of training steps required for an SOM to properly learn and represent arbitrary manifolds there are a few rules of thumb which help assess the suitability of such learning. During training the SOM undergoes two phases: the initial *organization* phase aligns the neurons on the lattice such that the resulting mapping is *topology preserving* (which usually occurs relatively quickly) while the *convergence* phase further develops the prototypes to best represent the input data (which can take quite some time, depending on the learning parameters used).  As a vector quantizer, the SOM should be trained until it is stable and represents the input data reasonably well.  To assess these criteria snapshots of the SOM mapping can be taken at various points in (training) time and compared to each other to determine a suitable point at which to terminate training.  
+
+The first criterion above is represented by the QSI -- or **Q**uantization **S**tability **I**ndex -- which, at any snapshot time step $\tau$, reports the proportion of data vectors whose BMUs have changed since the previous snapshot at time $\tau - 1$.  That is, 
+$$ QSI(\tau) = \frac{1}{nX} \sum\limits_{s=1}^{nX} \#\{ BMU_{\tau-1}(x_s) \, \neq \, BMU_{\tau}(x_s) \}$$
+As proper learning proceeds over time we expect $QSI(\tau) \to 0$.  The second criterion above is captured by the overall RMSQE -- or **R**oot **M**ean **S**quare **Q**uantization **E**rror -- of the mapping, which is the root average of the `SQE` of each data vector (as explained in Section \@ref(secRecall)). At snapshot time $\tau$ this is 
+$$ RMSQE(\tau) = \sqrt{ \frac{1}{nX} \sum\limits_{s=1}^{nX} d_E^2(x_s, w_{j^*_{\tau}}) } $$
+where $d_E^2(\cdot,\cdot)$ is squared Euclidean distance and the notation $w_{j^*_{\tau}}$ denotes the prevailing prototype BMU of data vector $x_s$ at snapshot time $\tau$.Conscience-SOM learning provides a third suitable metric to assess the quality of SOM training. Designed to produce maximum-entropy SOM mappings, a CSOM should be trained until its Entropy (section \@ref(secRecall)) is maximal, or at least has stabilized at some near-maximal plateau.  
+
+Monitoring of these quantities can be activated prior to SOM training via the method `set_monitoring_freq`, which takes as argument the *incremental* number of steps between monitoring snapshots and stores this argument in the field `mtr_freq`. By default, `initialize_SOM` sets `mtr_freq = 0` which means no monitoring is performed. Here, we reset the SHGR SOM and repeat training for 100,000 steps with monitoring activated at every 10,000 steps: 
+```{r, ck-mtr, eval=T, echo=T, collapse=T}
+# Initialize the SOM 
+mysom = SOM$new()
+mysom$initialize_SOM(SHGR$X, 20, 20, "hex")
+
+# Set the desired snapshot window 
+mysom$set_monitoring_freq(10000)
+mysom$mtr_freq
+
+# Train 
+mysom$train_SOM(100000, SHGR$X)
+```
+The status message displayed during training will indicate the monitoring frequency. After training, the monitored quantities can be extracted via: 
+```{r, ck-mtrquantities, eval=T, echo=T, collapse=T}
+# The training ages at which snapshots were taken
+head(mysom$mtr_age)
+
+# The QSI at each monitoring snapshot. 
+# By convention, the first QSI is NA because it compares two snapshots
+head(mysom$mtr_QSI)
+
+# The RMSQE at each monitoring snapshot
+head(mysom$mtr_RMSQE)
+
+# The Entropies at each monitoring snapshot
+head(mysom$mtr_Entropy)
+```
+These quantities can be visualized as time series for user analysis (see Section \@ref(secVis)).  
+
+**Note:** Most of the recall quantities described above will be computed at each monitoring snapshot. Care should be taken to set `mtr_freq` appropriately: it should be small enough to capture meaningful trends in the monitored quantities but also large enough to not incur substantial increase in training time, as the recall is a computationally expensive part of SOM learning.  
+
+
+## Parallel Processing 
+
+SOMDisco's parallel implementation is supported by [RcppParallel](https://cran.r-project.org/web/packages/RcppParallel/index.html).  By default, `initialize_SOM` activates parallel computation of all possible quantities involved in SOM training and recall.  For online (sequential) SOM training, this includes BMU selection and prototype updates at each training step. Most recall quantities can be processed in parallel. 
+
+The `parallel` field of an instantiated SOM object controls whether computation is performed in parallel. To disable parallel processing, the `set_parallel` method can be used to set `parallel = FALSE`: 
+```{r, ck-parallel, eval=T, echo=T, collapse=T}
+# View existint parallel status 
+mysom$parallel
+
+# To disable 
+mysom$set_parallel(FALSE)
+
+# Check 
+mysom$parallel 
+```
+
+Machine specific threading can be controlled via RcppParallel functions. To control the number of threads made available for parallel processing, see `?RcppParallel::defaultNumThreads` and `?RcppParallel::setThreadOptions`. When SOMDisco is loaded (via `library(SOMDisco)`), the following command is issued to the current R environment, which reserves one thread from processing for other uses:
+```{r, ck-threads, eval=T, echo=T, collapse=T}
+RcppParallel::setThreadOptions(numThreads = RcppParallel::defaultNumThreads() - 1)
+```
+
+
+## Saving & Loading
+
+Trained SOM objects can be saved to disk for future access via the `save` method. This method requires a user-specified file name and **must have extension `.som`**. 
+```{r, ck-save, eval=T, echo=T, collapse=T}
+# Save method, filename must have .som extension 
+mysom$save("mysom.som")
+```
+
+While the file has extension `.som` it is saved in R's binary `.rds` format as a list. R's `readRDS` command *can* be used to return this list to the user's environment in a new R session, but the pointers to the C++ object are destroyed on exit of the first session. The `load` method will properly restore a trained and previously saved SOM object to memory. Once loaded all object methods are available. For example, we can load the previously saved SOM and continue training (with the same SHGR data): 
+```{r, ck-load, eval=T, echo=T, collapse=T}
+# Load the prevoiusly saved .som file 
+mysom2 = SOMDisco::SOM$new() 
+mysom2$load("mysom.som")
+
+# Check that it is the same
+mysom2$age 
+
+# Re-train for another 10000 steps 
+mysom2$train_SOM(10000, SHGR$X)
+```
+
+

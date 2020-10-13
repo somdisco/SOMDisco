@@ -1,0 +1,20 @@
+# Installation
+
+SOMDisco is available for Unix-like systems from github (not CRAN), installable via  
+
+```{r, echo=T, eval=F}
+devtools::install_github("somdisco/SOMDisco")
+```
+
+Windows users can clone the repository and modify their `Makevars` files accordingly.  The `DESCRIPTION` file in the package source lists the following 3rd-party R package dependencies: 
+```
+Imports: 
+    Rcpp (>= 1.0.1), 
+    stringr, 
+    igraph, 
+    dplyr, 
+    Rdpack
+LinkingTo: Rcpp, RcppArmadillo, RcppParallel
+```
+
+SOM training is made efficient through use of a templated C++ CSOM class.  For those who may desire custom or expanded functionality,  the class template is implemented in header-only fashion in the `inst/include` directoy of the package source.  

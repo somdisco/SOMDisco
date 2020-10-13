@@ -1,0 +1,40 @@
+---
+title: "SOMDisco"
+subtitle: "Fast Learning and Visualization of Conscience-SOMs"  
+author: "Josh Taylor"
+#date: "15-July-2020"
+site: bookdown::bookdown_site
+#documentclass: book
+documentclass: article
+bibliography: [somdisco_refs.bib]
+csl: "ieee.csl"
+link-citations: yes
+output:
+  bookdown::gitbook: default
+  bookdown::pdf_book: 
+    includes:
+      in_header: preamble.tex
+    latex_engine: xelatex
+    keep_tex: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = T, collapse = T)
+knitr::opts_chunk$set(cache.extra = knitr::rand_seed)
+```
+
+
+# Preface {-}
+
+SOMDisco is an R package intended to address several advances in SOM learning and analysis that are currently missing in currently available SOM packages for R ([som](https://cran.r-project.org/web/packages/som/), [kohonen](https://cran.r-project.org/web/packages/kohonen/), and [popsom](https://cran.r-project.org/web/packages/popsom/index.html)).  The main contributions of SOMDisco are: 
+
++ Integration of DeSieno's Conscience-SOM modifications to Kohonen's original algorithm to attempt maximum entropy SOM learning
++ Fast and efficient C++ implementation of CSOM training (based on [Rcpp](https://cran.r-project.org/web/packages/Rcpp/index.html) and [RcppArmadillo](https://cran.r-project.org/web/packages/RcppArmadillo/index.html))
++ Optional parallel SOM training and recall (as applicable, via [RcppParallel](https://cran.r-project.org/web/packages/RcppParallel/index.html))
++ Computation of the CADJ matrix, which is a weighted topological adjacency of SOM prototypes helpful in cluster discovery
++ The CONNvis visualization (requires the `TopoRNet` R package) which represents the topological information in CADJ on the SOM lattice
++ Other advanced SOM visualizations (the mU-matrix, propagation of discrete and continuous values on the lattice)
+
+
+
+
