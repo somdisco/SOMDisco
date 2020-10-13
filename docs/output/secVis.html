@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 6 A Complete Example with Visualizations | SOMDisco</title>
+  <meta name="description" content="Chapter 6 A Complete Example with Visualizations | SOMDisco" />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 6 A Complete Example with Visualizations | SOMDisco" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 6 A Complete Example with Visualizations | SOMDisco" />
+  
+  
+  
+
+<meta name="author" content="Josh Taylor" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="som-learning.html"/>
+<link rel="next" href="references.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="background.html"><a href="background.html"><i class="fa fa-check"></i><b>1</b> Background</a><ul>
+<li class="chapter" data-level="1.1" data-path="background.html"><a href="background.html#kohonens-som"><i class="fa fa-check"></i><b>1.1</b> Kohonen’s SOM</a></li>
+<li class="chapter" data-level="1.2" data-path="background.html"><a href="background.html#conscience-som"><i class="fa fa-check"></i><b>1.2</b> Conscience SOM</a></li>
+<li class="chapter" data-level="1.3" data-path="background.html"><a href="background.html#the-cadj-matrix"><i class="fa fa-check"></i><b>1.3</b> The CADJ Matrix</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="installation.html"><a href="installation.html"><i class="fa fa-check"></i><b>2</b> Installation</a></li>
+<li class="chapter" data-level="3" data-path="shgr-example-data.html"><a href="shgr-example-data.html"><i class="fa fa-check"></i><b>3</b> SHGR Example Data</a></li>
+<li class="chapter" data-level="4" data-path="som-initialization.html"><a href="som-initialization.html"><i class="fa fa-check"></i><b>4</b> SOM Initialization</a><ul>
+<li class="chapter" data-level="4.1" data-path="som-initialization.html"><a href="som-initialization.html#lattice-quantitites"><i class="fa fa-check"></i><b>4.1</b> Lattice Quantitites</a></li>
+<li class="chapter" data-level="4.2" data-path="som-initialization.html"><a href="som-initialization.html#network-scaling"><i class="fa fa-check"></i><b>4.2</b> Network Scaling</a></li>
+<li class="chapter" data-level="4.3" data-path="som-initialization.html"><a href="som-initialization.html#prototype-initialization"><i class="fa fa-check"></i><b>4.3</b> Prototype Initialization</a></li>
+<li class="chapter" data-level="4.4" data-path="som-initialization.html"><a href="som-initialization.html#win-frequency-initialization"><i class="fa fa-check"></i><b>4.4</b> Win Frequency Initialization</a></li>
+<li class="chapter" data-level="4.5" data-path="som-initialization.html"><a href="som-initialization.html#learning-rate-initialization"><i class="fa fa-check"></i><b>4.5</b> Learning Rate Initialization</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="som-learning.html"><a href="som-learning.html"><i class="fa fa-check"></i><b>5</b> SOM Learning</a><ul>
+<li class="chapter" data-level="5.1" data-path="som-learning.html"><a href="som-learning.html#network-training"><i class="fa fa-check"></i><b>5.1</b> Network Training</a></li>
+<li class="chapter" data-level="5.2" data-path="som-learning.html"><a href="som-learning.html#secRecall"><i class="fa fa-check"></i><b>5.2</b> Network Recall</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="som-learning.html"><a href="som-learning.html#bmu---som-forwad-map"><i class="fa fa-check"></i><b>5.2.1</b> BMU - SOM Forwad Map</a></li>
+<li class="chapter" data-level="5.2.2" data-path="som-learning.html"><a href="som-learning.html#rf_members---som-reverse-map"><i class="fa fa-check"></i><b>5.2.2</b> RF_members - SOM Reverse Map</a></li>
+<li class="chapter" data-level="5.2.3" data-path="som-learning.html"><a href="som-learning.html#rf_size"><i class="fa fa-check"></i><b>5.2.3</b> RF_size</a></li>
+<li class="chapter" data-level="5.2.4" data-path="som-learning.html"><a href="som-learning.html#quantization-error"><i class="fa fa-check"></i><b>5.2.4</b> Quantization Error</a></li>
+<li class="chapter" data-level="5.2.5" data-path="som-learning.html"><a href="som-learning.html#entropy"><i class="fa fa-check"></i><b>5.2.5</b> Entropy</a></li>
+<li class="chapter" data-level="5.2.6" data-path="som-learning.html"><a href="som-learning.html#u-matrix-fences"><i class="fa fa-check"></i><b>5.2.6</b> U-Matrix Fences</a></li>
+<li class="chapter" data-level="5.2.7" data-path="som-learning.html"><a href="som-learning.html#cadj-conn"><i class="fa fa-check"></i><b>5.2.7</b> CADJ &amp; CONN</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="som-learning.html"><a href="som-learning.html#recalling-labeled-data"><i class="fa fa-check"></i><b>5.3</b> Recalling Labeled Data</a></li>
+<li class="chapter" data-level="5.4" data-path="som-learning.html"><a href="som-learning.html#monitoring-learning"><i class="fa fa-check"></i><b>5.4</b> Monitoring Learning</a></li>
+<li class="chapter" data-level="5.5" data-path="som-learning.html"><a href="som-learning.html#parallel-processing"><i class="fa fa-check"></i><b>5.5</b> Parallel Processing</a></li>
+<li class="chapter" data-level="5.6" data-path="som-learning.html"><a href="som-learning.html#saving-loading"><i class="fa fa-check"></i><b>5.6</b> Saving &amp; Loading</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="secVis.html"><a href="secVis.html"><i class="fa fa-check"></i><b>6</b> A Complete Example with Visualizations</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">SOMDisco</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="secVis" class="section level1">
+<h1><span class="header-section-number">Chapter 6</span> A Complete Example with Visualizations</h1>
+<p>In this section we exercise a typical standard use of SOMDisco and demonstrate how the supporting SOM visualization functions can be used to aid inference and cluster extraction from a trained SOM. The SOM is unique among vector quantizers in that it possesses a predefined output topology (typically 2-d, as is our setting) which can be harnessed to compactly express the information learned by an SOM for easy inspection.</p>
+<p>For speed, all custom SOM visualizations are predicated on R’s <code>base::plot</code> functionality (vs., e.g., ggplot). Each of the visualization functions demonstrated in this section are intended to work together (via plot layering) to allow simultaneous representation of multiple learned SOM quantities. Many customization options exist for the visualization functions; their individual help menus explain this optionality.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" data-line-number="1"><span class="kw">library</span>(SOMDisco)</a>
+<a class="sourceLine" id="cb40-2" data-line-number="2"><span class="kw">library</span>(TopoRNet)</a></code></pre></div>
+<p>To begin, we will setup a new SOM object for SHGR training:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="co"># Initialize a 20x20 SOM with hexagonal lattice </span></a>
+<a class="sourceLine" id="cb41-2" data-line-number="2">mysom =<span class="st"> </span>SOM<span class="op">$</span><span class="kw">new</span>() </a>
+<a class="sourceLine" id="cb41-3" data-line-number="3">mysom<span class="op">$</span><span class="kw">initialize_SOM</span>(SHGR<span class="op">$</span>X, <span class="dv">20</span>, <span class="dv">20</span>, <span class="st">&quot;hex&quot;</span>)</a>
+<a class="sourceLine" id="cb41-4" data-line-number="4"><span class="co">## Setting lattice quantities</span></a>
+<a class="sourceLine" id="cb41-5" data-line-number="5"><span class="co">## ++ calculating lattice (x,y) coordinates ... done</span></a>
+<a class="sourceLine" id="cb41-6" data-line-number="6"><span class="co">## ++ calculating neuron lattice adjacencies ... done</span></a>
+<a class="sourceLine" id="cb41-7" data-line-number="7"><span class="co">## ++ calculating geodesic lattice distances between neurons ... done</span></a>
+<a class="sourceLine" id="cb41-8" data-line-number="8"><span class="co">## ++ assigning geodesic lattice distances to distlist ... done</span></a>
+<a class="sourceLine" id="cb41-9" data-line-number="9"><span class="co">## ++ calculating lattice tile vertices ... done</span></a>
+<a class="sourceLine" id="cb41-10" data-line-number="10"><span class="co">## ----------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb41-11" data-line-number="11"><span class="co">## Setting training data</span></a>
+<a class="sourceLine" id="cb41-12" data-line-number="12"><span class="co">## ----------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb41-13" data-line-number="13"><span class="co">## Setting network ranges</span></a>
+<a class="sourceLine" id="cb41-14" data-line-number="14"><span class="co">## ++ external = [-115.19, 1347.57]</span></a>
+<a class="sourceLine" id="cb41-15" data-line-number="15"><span class="co">## ++ internal = [0.00, 1.00]</span></a>
+<a class="sourceLine" id="cb41-16" data-line-number="16"><span class="co">## ++ change defaults via $set_netrng</span></a>
+<a class="sourceLine" id="cb41-17" data-line-number="17"><span class="co">## ----------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb41-18" data-line-number="18"><span class="co">## Initializing prototypes to random uniform</span></a>
+<a class="sourceLine" id="cb41-19" data-line-number="19"><span class="co">## ++ to set a particular random seed call set.seed() and then $set_W_runif()</span></a>
+<a class="sourceLine" id="cb41-20" data-line-number="20"><span class="co">## ++ to set to specific values call $set_W()</span></a>
+<a class="sourceLine" id="cb41-21" data-line-number="21"><span class="co">## ----------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb41-22" data-line-number="22"><span class="co">## Initializing prototype win frequencies to equiprobable</span></a>
+<a class="sourceLine" id="cb41-23" data-line-number="23"><span class="co">## ++ to set to specific values call $set_p(values)</span></a>
+<a class="sourceLine" id="cb41-24" data-line-number="24"><span class="co">## ----------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb41-25" data-line-number="25"><span class="co">## Setting default learning rates</span></a>
+<a class="sourceLine" id="cb41-26" data-line-number="26"><span class="co">## Storing the annealing schedule as:</span></a>
+<a class="sourceLine" id="cb41-27" data-line-number="27"><span class="co">## t	alpha	beta	gamma	sigma</span></a>
+<a class="sourceLine" id="cb41-28" data-line-number="28"><span class="co">## 16384	0.50	0.05	0.01	3</span></a>
+<a class="sourceLine" id="cb41-29" data-line-number="29"><span class="co">## 81920	0.25	0.03	0.00	2</span></a>
+<a class="sourceLine" id="cb41-30" data-line-number="30"><span class="co">## 163840	0.10	0.01	0.00	1</span></a>
+<a class="sourceLine" id="cb41-31" data-line-number="31"><span class="co">## 409600	0.05	0.01	0.00	1</span></a>
+<a class="sourceLine" id="cb41-32" data-line-number="32"><span class="co">## 1638400	0.01	0.00	0.00	1</span></a>
+<a class="sourceLine" id="cb41-33" data-line-number="33"><span class="co">## ++ change via $get_LRAS and $set_LRAS</span></a>
+<a class="sourceLine" id="cb41-34" data-line-number="34"><span class="co">## ----------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb41-35" data-line-number="35"></a>
+<a class="sourceLine" id="cb41-36" data-line-number="36"><span class="co"># For reproducibility, re-initialize the prototypes with a given seed </span></a>
+<a class="sourceLine" id="cb41-37" data-line-number="37"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
+<a class="sourceLine" id="cb41-38" data-line-number="38">mysom<span class="op">$</span><span class="kw">set_W_runif</span>()</a></code></pre></div>
+<p>The lattice can be immediately visualized after initialization.</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" data-line-number="1"><span class="co"># Setup an SOM plot window </span></a>
+<a class="sourceLine" id="cb42-2" data-line-number="2"><span class="kw">vis_som_setup</span>(<span class="dt">SOM=</span>mysom, <span class="dt">lattice_coords =</span> T)</a>
+<a class="sourceLine" id="cb42-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb42-4" data-line-number="4"><span class="co"># Add the lattice tiles as polygons</span></a>
+<a class="sourceLine" id="cb42-5" data-line-number="5"><span class="kw">vis_som_tiles</span>(<span class="dt">SOM=</span>mysom, <span class="dt">add=</span>T)</a>
+<a class="sourceLine" id="cb42-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb42-7" data-line-number="7"><span class="co"># Add the neurons as points </span></a>
+<a class="sourceLine" id="cb42-8" data-line-number="8"><span class="kw">vis_som_neurons</span>(<span class="dt">SOM =</span> mysom, <span class="dt">add =</span> T)</a></code></pre></div>
+<p><img src="SOMDisco.README_files/figure-html/ck-SHGRSOMvislattice-1.png" width="672" />
+The SOM visualizations are intended to be setup via a call to <code>vis_som_setup</code> then further augmented: in this case with the lattice tiles (whose shape is dependent upon <code>lattice_type</code>: squares for “grid” types, and hexagons for “hex” types) and neurons. Most visualization functions have an <code>add</code> argument, which if set to <code>FALSE</code> will call <code>vis_som_setup</code> internally (thus bypassing the need to explicitly layer the functions with individual calls).</p>
+<p>We set the SOM to monitor every 10,000 steps and train for 500,000 steps:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1">mysom<span class="op">$</span><span class="kw">set_monitoring_freq</span>(<span class="dv">10000</span>)</a>
+<a class="sourceLine" id="cb43-2" data-line-number="2">mysom<span class="op">$</span><span class="kw">train_SOM</span>(<span class="dv">500000</span>, SHGR<span class="op">$</span>X)</a>
+<a class="sourceLine" id="cb43-3" data-line-number="3"><span class="co">## SOM Training:</span></a>
+<a class="sourceLine" id="cb43-4" data-line-number="4"><span class="co">## ++ Reporting every 10000, monitoring every 10000steps</span></a>
+<a class="sourceLine" id="cb43-5" data-line-number="5"><span class="co">## 1	2	3	4	5	6	7	8	</span></a>
+<a class="sourceLine" id="cb43-6" data-line-number="6"><span class="co">## 9	10	11	12	13	14	15	16	</span></a>
+<a class="sourceLine" id="cb43-7" data-line-number="7"><span class="co">## 17	18	19	20	21	22	23	24	</span></a>
+<a class="sourceLine" id="cb43-8" data-line-number="8"><span class="co">## 25	26	27	28	29	30	31	32	</span></a>
+<a class="sourceLine" id="cb43-9" data-line-number="9"><span class="co">## 33	34	35	36	37	38	39	40	</span></a>
+<a class="sourceLine" id="cb43-10" data-line-number="10"><span class="co">## 41	42	43	44	45	46	47	48	</span></a>
+<a class="sourceLine" id="cb43-11" data-line-number="11"><span class="co">## 49	50	</span></a>
+<a class="sourceLine" id="cb43-12" data-line-number="12"><span class="co">## End Training (current age = 500000)</span></a>
+<a class="sourceLine" id="cb43-13" data-line-number="13"><span class="co">## ----------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb43-14" data-line-number="14"><span class="co">## SOM Recall:</span></a>
+<a class="sourceLine" id="cb43-15" data-line-number="15"><span class="co">## ++ finding BMUs of data ... done</span></a>
+<a class="sourceLine" id="cb43-16" data-line-number="16"><span class="co">## ++ building CADJ matrix ... done</span></a>
+<a class="sourceLine" id="cb43-17" data-line-number="17"><span class="co">## ++ setting RF_size ... done</span></a>
+<a class="sourceLine" id="cb43-18" data-line-number="18"><span class="co">## ++ calculating SOM Entropy ... done</span></a>
+<a class="sourceLine" id="cb43-19" data-line-number="19"><span class="co">## ++ populating RF_members ... done</span></a>
+<a class="sourceLine" id="cb43-20" data-line-number="20"><span class="co">## ++ setting lattice fences ... done</span></a></code></pre></div>
+<p>If monitoring is activated, the quantities discussed in Section WHERE? can be visualized after training:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb44-1" data-line-number="1"><span class="kw">vis_som_training</span>(<span class="dt">SOM =</span> mysom, <span class="dt">vis.SOM =</span> T, <span class="dt">vis.mtr =</span> T)</a></code></pre></div>
+<p><img src="SOMDisco.README_files/figure-html/ck-SHGRSOMvismonitor-1.png" width="672" />
+The top panel displays a heatmap of the <code>RF_size</code> of each prototype’s Receptive Field. White tiles correspond to empty Receptive Fields, black to low and light blue to high <code>RF_size</code>; combined, this is the mU-Matrix visualization of <span class="citation">[<a href="#ref-MerenyiJainVillmann">6</a>]</span> Clusters in these data are readily visible, separated by areas of “dead” neurons, which do not represent any training data. The lower panel plots the RMSQE, QSI and Entropy (recorded every 10k training steps) vs training age. While RMSQE and Entropy have been somewhat stable over most of the current age of the SOM QSI has not, indicating further training may be beneficial. We continue training another 500k steps and re-create the monitoring visualization:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="co"># Train another 500k steps and view the resulting age </span></a>
+<a class="sourceLine" id="cb45-2" data-line-number="2">mysom<span class="op">$</span><span class="kw">train_SOM</span>(<span class="dv">500000</span>, SHGR<span class="op">$</span>X)</a>
+<a class="sourceLine" id="cb45-3" data-line-number="3"><span class="co">## SOM Training:</span></a>
+<a class="sourceLine" id="cb45-4" data-line-number="4"><span class="co">## ++ Reporting every 10000, monitoring every 10000steps</span></a>
+<a class="sourceLine" id="cb45-5" data-line-number="5"><span class="co">## 1	2	3	4	5	6	7	8	</span></a>
+<a class="sourceLine" id="cb45-6" data-line-number="6"><span class="co">## 9	10	11	12	13	14	15	16	</span></a>
+<a class="sourceLine" id="cb45-7" data-line-number="7"><span class="co">## 17	18	19	20	21	22	23	24	</span></a>
+<a class="sourceLine" id="cb45-8" data-line-number="8"><span class="co">## 25	26	27	28	29	30	31	32	</span></a>
+<a class="sourceLine" id="cb45-9" data-line-number="9"><span class="co">## 33	34	35	36	37	38	39	40	</span></a>
+<a class="sourceLine" id="cb45-10" data-line-number="10"><span class="co">## 41	42	43	44	45	46	47	48	</span></a>
+<a class="sourceLine" id="cb45-11" data-line-number="11"><span class="co">## 49	50	</span></a>
+<a class="sourceLine" id="cb45-12" data-line-number="12"><span class="co">## End Training (current age = 1000000)</span></a>
+<a class="sourceLine" id="cb45-13" data-line-number="13"><span class="co">## ----------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb45-14" data-line-number="14"><span class="co">## SOM Recall:</span></a>
+<a class="sourceLine" id="cb45-15" data-line-number="15"><span class="co">## ++ finding BMUs of data ... done</span></a>
+<a class="sourceLine" id="cb45-16" data-line-number="16"><span class="co">## ++ building CADJ matrix ... done</span></a>
+<a class="sourceLine" id="cb45-17" data-line-number="17"><span class="co">## ++ setting RF_size ... done</span></a>
+<a class="sourceLine" id="cb45-18" data-line-number="18"><span class="co">## ++ calculating SOM Entropy ... done</span></a>
+<a class="sourceLine" id="cb45-19" data-line-number="19"><span class="co">## ++ populating RF_members ... done</span></a>
+<a class="sourceLine" id="cb45-20" data-line-number="20"><span class="co">## ++ setting lattice fences ... done</span></a>
+<a class="sourceLine" id="cb45-21" data-line-number="21">mysom<span class="op">$</span>age </a>
+<a class="sourceLine" id="cb45-22" data-line-number="22"><span class="co">## [1] 1e+06</span></a>
+<a class="sourceLine" id="cb45-23" data-line-number="23"></a>
+<a class="sourceLine" id="cb45-24" data-line-number="24"><span class="co"># Visualize Training </span></a>
+<a class="sourceLine" id="cb45-25" data-line-number="25"><span class="kw">vis_som_training</span>(<span class="dt">SOM =</span> mysom, <span class="dt">vis.SOM =</span> T, <span class="dt">vis.mtr =</span> T)</a></code></pre></div>
+<p><img src="SOMDisco.README_files/figure-html/ck-SHGRSOMretrain-1.png" width="672" />
+After training we can assess the organization of the lattice by plotting the 100-d SOM prototype vectors in their respective lattice tiles:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb46-1" data-line-number="1"><span class="co"># Setup the lattice tiles </span></a>
+<a class="sourceLine" id="cb46-2" data-line-number="2"><span class="kw">vis_som_setup</span>(<span class="dt">SOM =</span> mysom, <span class="dt">lattice_coords =</span> T)</a>
+<a class="sourceLine" id="cb46-3" data-line-number="3"><span class="kw">vis_som_tiles</span>(<span class="dt">SOM =</span> mysom, <span class="dt">add =</span> T)</a>
+<a class="sourceLine" id="cb46-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb46-5" data-line-number="5"><span class="co"># Add the prototype vectors in lattice situ </span></a>
+<a class="sourceLine" id="cb46-6" data-line-number="6"><span class="kw">vis_som_prototypes</span>(<span class="dt">SOM=</span>mysom, <span class="dt">add=</span>T)</a></code></pre></div>
+<p><img src="SOMDisco.README_files/figure-html/ck-SHGRSOMvisprotos-1.png" width="672" />
+Clusters of similar prototype shapes are readily apparent, confirming the organization of this SOM.</p>
+<p>We can explore these apparent clusters with the CONNvis visualization which requires the <code>TopoRNet</code> package to be installed as well. Using the <code>CONN</code> matrix just learned we define a <code>TRN</code> object and compute the CONNvis statistics</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1">mytrn =<span class="st"> </span>TRN<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb47-2" data-line-number="2">mytrn<span class="op">$</span><span class="kw">set_input_topo</span>(mysom<span class="op">$</span>W, mysom<span class="op">$</span><span class="kw">CONN</span>())</a>
+<a class="sourceLine" id="cb47-3" data-line-number="3"><span class="co">## Setting Input Space Topos</span></a>
+<a class="sourceLine" id="cb47-4" data-line-number="4"><span class="co">## ++ storing vertices ... done</span></a>
+<a class="sourceLine" id="cb47-5" data-line-number="5"><span class="co">## ++ storing edge list ... done</span></a>
+<a class="sourceLine" id="cb47-6" data-line-number="6">mytrn<span class="op">$</span><span class="kw">set_output_topo</span>(mysom<span class="op">$</span>nu_xy, mysom<span class="op">$</span>nu_ADJ)</a>
+<a class="sourceLine" id="cb47-7" data-line-number="7"><span class="co">## Setting Output Space Topos</span></a>
+<a class="sourceLine" id="cb47-8" data-line-number="8"><span class="co">## ++ storing vertices ... done</span></a>
+<a class="sourceLine" id="cb47-9" data-line-number="9"><span class="co">## ++ storing edge list ... done</span></a>
+<a class="sourceLine" id="cb47-10" data-line-number="10"><span class="co">## ++ computing folding lengths of forward network mapping ... done</span></a>
+<a class="sourceLine" id="cb47-11" data-line-number="11"><span class="co">## ++ computing folding lengths of backward network mapping ...</span></a>
+<a class="sourceLine" id="cb47-12" data-line-number="12"><span class="co">## Warning in mytrn$set_output_topo(mysom$nu_xy, mysom$nu_ADJ): NAs introduced by</span></a>
+<a class="sourceLine" id="cb47-13" data-line-number="13"><span class="co">## coercion to integer range</span></a>
+<a class="sourceLine" id="cb47-14" data-line-number="14"><span class="co">##  done</span></a>
+<a class="sourceLine" id="cb47-15" data-line-number="15"><span class="co">## ++ computing topology preserving radius ... done</span></a>
+<a class="sourceLine" id="cb47-16" data-line-number="16">mytrn<span class="op">$</span><span class="kw">set_CONNvis</span>()</a>
+<a class="sourceLine" id="cb47-17" data-line-number="17"><span class="co">## CONNvis parameterization:++ computing local ranks ... done</span></a>
+<a class="sourceLine" id="cb47-18" data-line-number="18"><span class="co">## ++ computing local rank stats ... done</span></a>
+<a class="sourceLine" id="cb47-19" data-line-number="19"><span class="co">## ++ computing global ranks ... done</span></a>
+<a class="sourceLine" id="cb47-20" data-line-number="20"><span class="co">## ++ computing global rank stats ... done</span></a>
+<a class="sourceLine" id="cb47-21" data-line-number="21"><span class="co">## ++ computing output topology length stats ... done</span></a></code></pre></div>
+<p>which are passed, along with our trained SOM, to the function <code>vis_som_CONNvis</code>:</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" data-line-number="1"><span class="kw">vis_som_CONNvis</span>(<span class="dt">SOM =</span> mysom, <span class="dt">TRN =</span> mytrn, <span class="dt">add =</span> F)</a></code></pre></div>
+<p><img src="SOMDisco.README_files/figure-html/ck-SHGRSOMconnvis-1.png" width="672" />
+CONNvis ranks each <code>CONN</code> edge by local and global topological importance, indicated by color (red, blue, green, yellow, grayscale) and line width. As recognized above, many clusters are readily apparent on the SOM with the mU-Matrix visualization alone. CONNvis has further revealed evidence of separation of large clusters in the middle-left and middel-right of the SOM.</p>
+<p>Since these training data are labeled we can project the data labels through the learned SOM mapping to expand the CONNvis findings.</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1">mysom<span class="op">$</span><span class="kw">set_RF_label</span>(SHGR<span class="op">$</span>label)</a></code></pre></div>
+<p>Visualizations involving labels require an additional data frame known as a color table or <code>ctab</code> to function which controls the coloring of each character label found in the dataset. The <code>ctab</code> should be a data frame with columns <code>label</code> (listing the distinct character labels) and <code>color</code> giving a hex color code (or R color name) corresponding to each label. The SHGR data is packaged with the following color table:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" data-line-number="1"><span class="kw">head</span>(SHGR<span class="op">$</span>ctab)</a>
+<a class="sourceLine" id="cb50-2" data-line-number="2"><span class="co">##   label   color</span></a>
+<a class="sourceLine" id="cb50-3" data-line-number="3"><span class="co">## 1     A #0F52BA</span></a>
+<a class="sourceLine" id="cb50-4" data-line-number="4"><span class="co">## 2     B #FF7417</span></a>
+<a class="sourceLine" id="cb50-5" data-line-number="5"><span class="co">## 3     C #4CBB17</span></a>
+<a class="sourceLine" id="cb50-6" data-line-number="6"><span class="co">## 4     D #ED2939</span></a>
+<a class="sourceLine" id="cb50-7" data-line-number="7"><span class="co">## 5     E #B660CD</span></a>
+<a class="sourceLine" id="cb50-8" data-line-number="8"><span class="co">## 6     F #FFF200</span></a></code></pre></div>
+<p>which can be visualized via</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="kw">vis_ctab</span>(<span class="dt">ctab=</span>SHGR<span class="op">$</span>ctab)</a></code></pre></div>
+<p><img src="SOMDisco.README_files/figure-html/ck-SHGRSOMctab2-1.png" width="672" /></p>
+<p>With a color table set, the label distribution in each prototype’s Receptive Field can be visualized on the lattice as a proportional pie chart in each lattice tile:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" data-line-number="1"><span class="co"># Setup the lattice tiles</span></a>
+<a class="sourceLine" id="cb52-2" data-line-number="2"><span class="kw">vis_som_setup</span>(<span class="dt">SOM =</span> mysom, <span class="dt">lattice_coords =</span> T)</a>
+<a class="sourceLine" id="cb52-3" data-line-number="3"><span class="kw">vis_som_tiles</span>(<span class="dt">SOM =</span> mysom, <span class="dt">add =</span> T)</a>
+<a class="sourceLine" id="cb52-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb52-5" data-line-number="5"><span class="co"># View the mapped label distribution</span></a>
+<a class="sourceLine" id="cb52-6" data-line-number="6"><span class="kw">vis_som_labeldist</span>(<span class="dt">SOM=</span>mysom, <span class="dt">ctab=</span>SHGR<span class="op">$</span>ctab, <span class="dt">add=</span>T)</a></code></pre></div>
+<p><img src="SOMDisco.README_files/figure-html/ck-SHGRSOMlabeldist-1.png" width="672" />
+The neighborhoods on the SOM appear to be meaningful, with the majority of prototype Receptive Fields containing data of the same label. There is some visible mixing of labels in the RFs of “boundary prototypes” which sit between neighboring clusters, which is to be expected for data of any complexity. Often, an analyst may only care about the plurality winning label within each Receptive Field, which can be viewed by “painting” the SOM tiles with their corresponding label color, and annotating each tile with its label:</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="co"># Setup the lattice tiles, colored by prototype label </span></a>
+<a class="sourceLine" id="cb53-2" data-line-number="2"><span class="kw">vis_som_setup</span>(<span class="dt">SOM =</span> mysom, <span class="dt">lattice_coords =</span> T)</a>
+<a class="sourceLine" id="cb53-3" data-line-number="3"><span class="kw">vis_som_label</span>(<span class="dt">SOM =</span> mysom, <span class="dt">ctab =</span> SHGR<span class="op">$</span>ctab, <span class="dt">add =</span> T)</a>
+<a class="sourceLine" id="cb53-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb53-5" data-line-number="5"><span class="co"># Annotate the tiles with the label </span></a>
+<a class="sourceLine" id="cb53-6" data-line-number="6"><span class="kw">vis_som_annotate</span>(<span class="dt">SOM =</span> mysom, <span class="dt">add =</span> T, <span class="dt">text =</span> mysom<span class="op">$</span>RF_label)</a></code></pre></div>
+<p><img src="SOMDisco.README_files/figure-html/ck-SHGRSOMlabel-1.png" width="672" />
+The propagated labels display roughly the same prototype clustering as suggested by the CONNvis above, confirming both our suggested clustering and the quality of the SHGR labeling.</p>
+
+<!-- # References {-} -->
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-MerenyiJainVillmann">
+<p>[6] E. Merényi, A. Jain, and T. Villmann, “Explicit magnification control of self-organizing maps for ‘forbidden’ data,” <em>IEEE Transactions on Neural Networks</em>, vol. 18, no. 3, pp. 786–797, 2007.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="som-learning.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["SOMDisco.README.pdf"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

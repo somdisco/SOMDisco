@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 5 SOM Learning | SOMDisco</title>
+  <meta name="description" content="Chapter 5 SOM Learning | SOMDisco" />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 5 SOM Learning | SOMDisco" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 5 SOM Learning | SOMDisco" />
+  
+  
+  
+
+<meta name="author" content="Josh Taylor" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="som-initialization.html"/>
+<link rel="next" href="secVis.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Preface</a></li>
+<li class="chapter" data-level="1" data-path="background.html"><a href="background.html"><i class="fa fa-check"></i><b>1</b> Background</a><ul>
+<li class="chapter" data-level="1.1" data-path="background.html"><a href="background.html#kohonens-som"><i class="fa fa-check"></i><b>1.1</b> Kohonen’s SOM</a></li>
+<li class="chapter" data-level="1.2" data-path="background.html"><a href="background.html#conscience-som"><i class="fa fa-check"></i><b>1.2</b> Conscience SOM</a></li>
+<li class="chapter" data-level="1.3" data-path="background.html"><a href="background.html#the-cadj-matrix"><i class="fa fa-check"></i><b>1.3</b> The CADJ Matrix</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="installation.html"><a href="installation.html"><i class="fa fa-check"></i><b>2</b> Installation</a></li>
+<li class="chapter" data-level="3" data-path="shgr-example-data.html"><a href="shgr-example-data.html"><i class="fa fa-check"></i><b>3</b> SHGR Example Data</a></li>
+<li class="chapter" data-level="4" data-path="som-initialization.html"><a href="som-initialization.html"><i class="fa fa-check"></i><b>4</b> SOM Initialization</a><ul>
+<li class="chapter" data-level="4.1" data-path="som-initialization.html"><a href="som-initialization.html#lattice-quantitites"><i class="fa fa-check"></i><b>4.1</b> Lattice Quantitites</a></li>
+<li class="chapter" data-level="4.2" data-path="som-initialization.html"><a href="som-initialization.html#network-scaling"><i class="fa fa-check"></i><b>4.2</b> Network Scaling</a></li>
+<li class="chapter" data-level="4.3" data-path="som-initialization.html"><a href="som-initialization.html#prototype-initialization"><i class="fa fa-check"></i><b>4.3</b> Prototype Initialization</a></li>
+<li class="chapter" data-level="4.4" data-path="som-initialization.html"><a href="som-initialization.html#win-frequency-initialization"><i class="fa fa-check"></i><b>4.4</b> Win Frequency Initialization</a></li>
+<li class="chapter" data-level="4.5" data-path="som-initialization.html"><a href="som-initialization.html#learning-rate-initialization"><i class="fa fa-check"></i><b>4.5</b> Learning Rate Initialization</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="som-learning.html"><a href="som-learning.html"><i class="fa fa-check"></i><b>5</b> SOM Learning</a><ul>
+<li class="chapter" data-level="5.1" data-path="som-learning.html"><a href="som-learning.html#network-training"><i class="fa fa-check"></i><b>5.1</b> Network Training</a></li>
+<li class="chapter" data-level="5.2" data-path="som-learning.html"><a href="som-learning.html#secRecall"><i class="fa fa-check"></i><b>5.2</b> Network Recall</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="som-learning.html"><a href="som-learning.html#bmu---som-forwad-map"><i class="fa fa-check"></i><b>5.2.1</b> BMU - SOM Forwad Map</a></li>
+<li class="chapter" data-level="5.2.2" data-path="som-learning.html"><a href="som-learning.html#rf_members---som-reverse-map"><i class="fa fa-check"></i><b>5.2.2</b> RF_members - SOM Reverse Map</a></li>
+<li class="chapter" data-level="5.2.3" data-path="som-learning.html"><a href="som-learning.html#rf_size"><i class="fa fa-check"></i><b>5.2.3</b> RF_size</a></li>
+<li class="chapter" data-level="5.2.4" data-path="som-learning.html"><a href="som-learning.html#quantization-error"><i class="fa fa-check"></i><b>5.2.4</b> Quantization Error</a></li>
+<li class="chapter" data-level="5.2.5" data-path="som-learning.html"><a href="som-learning.html#entropy"><i class="fa fa-check"></i><b>5.2.5</b> Entropy</a></li>
+<li class="chapter" data-level="5.2.6" data-path="som-learning.html"><a href="som-learning.html#u-matrix-fences"><i class="fa fa-check"></i><b>5.2.6</b> U-Matrix Fences</a></li>
+<li class="chapter" data-level="5.2.7" data-path="som-learning.html"><a href="som-learning.html#cadj-conn"><i class="fa fa-check"></i><b>5.2.7</b> CADJ &amp; CONN</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="som-learning.html"><a href="som-learning.html#recalling-labeled-data"><i class="fa fa-check"></i><b>5.3</b> Recalling Labeled Data</a></li>
+<li class="chapter" data-level="5.4" data-path="som-learning.html"><a href="som-learning.html#monitoring-learning"><i class="fa fa-check"></i><b>5.4</b> Monitoring Learning</a></li>
+<li class="chapter" data-level="5.5" data-path="som-learning.html"><a href="som-learning.html#parallel-processing"><i class="fa fa-check"></i><b>5.5</b> Parallel Processing</a></li>
+<li class="chapter" data-level="5.6" data-path="som-learning.html"><a href="som-learning.html#saving-loading"><i class="fa fa-check"></i><b>5.6</b> Saving &amp; Loading</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="secVis.html"><a href="secVis.html"><i class="fa fa-check"></i><b>6</b> A Complete Example with Visualizations</a></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">SOMDisco</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="som-learning" class="section level1">
+<h1><span class="header-section-number">Chapter 5</span> SOM Learning</h1>
+<div id="network-training" class="section level2">
+<h2><span class="header-section-number">5.1</span> Network Training</h2>
+<p>While several methods exposed to the user participate in SOM training, the main method (and, typically, the only method needing to be called) for SOM training, is <code>train_SOM</code>. As the <code>SOM</code> class was intetionally designed to not store the training data (to avoid duplicate memory occupation of larger training sets), the matrix of training data must be passed to this method. It should be the same data matrix supplied when calling <code>initialize_SOM</code> (internal checks will verify this, and return a runtime error if deviations are deteced). The following command performs 100,000 training steps on an SOM object previously initialized to learn the example SHGR data. Status information is automatically printed to the R console.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">mysom<span class="op">$</span><span class="kw">train_SOM</span>(<span class="dv">100000</span>, SHGR<span class="op">$</span>X)</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="co">## SOM Training:</span></a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="co">## ++ Reporting every 10000, monitoring every 0steps</span></a>
+<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="co">## 1	2	3	4	5	6	7	8	</span></a>
+<a class="sourceLine" id="cb17-5" data-line-number="5"><span class="co">## 9	10	</span></a>
+<a class="sourceLine" id="cb17-6" data-line-number="6"><span class="co">## End Training (current age = 100000)</span></a>
+<a class="sourceLine" id="cb17-7" data-line-number="7"><span class="co">## ----------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb17-8" data-line-number="8"><span class="co">## SOM Recall:</span></a>
+<a class="sourceLine" id="cb17-9" data-line-number="9"><span class="co">## ++ finding BMUs of data ... done</span></a>
+<a class="sourceLine" id="cb17-10" data-line-number="10"><span class="co">## ++ building CADJ matrix ... done</span></a>
+<a class="sourceLine" id="cb17-11" data-line-number="11"><span class="co">## ++ setting RF_size ... done</span></a>
+<a class="sourceLine" id="cb17-12" data-line-number="12"><span class="co">## ++ calculating SOM Entropy ... done</span></a>
+<a class="sourceLine" id="cb17-13" data-line-number="13"><span class="co">## ++ populating RF_members ... done</span></a>
+<a class="sourceLine" id="cb17-14" data-line-number="14"><span class="co">## ++ setting lattice fences ... done</span></a>
+<a class="sourceLine" id="cb17-15" data-line-number="15">mysom<span class="op">$</span>age </a>
+<a class="sourceLine" id="cb17-16" data-line-number="16"><span class="co">## [1] 1e+05</span></a></code></pre></div>
+<p>Internally, <code>train_SOM</code> calls the methods <code>update_W</code> and <code>update_p</code>, which perform updates to the prototype matrix <code>W</code> and the CSOM win frequencies <code>p</code> at each training step. These methods are exposed to the user, but should not be called separately independently. The <code>age</code> field stores the number of training steps that have been performed during the life of the instantiated SOM object. Additional training can be performed at any time by re-invoking the <code>train_SOM</code> method. Here, we train the above SOM for another 25,000 steps:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">mysom<span class="op">$</span><span class="kw">train_SOM</span>(<span class="dv">25000</span>, SHGR<span class="op">$</span>X)</a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="co">## SOM Training:</span></a>
+<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="co">## ++ Reporting every 10000, monitoring every 0steps</span></a>
+<a class="sourceLine" id="cb18-4" data-line-number="4"><span class="co">## 1	2	</span></a>
+<a class="sourceLine" id="cb18-5" data-line-number="5"><span class="co">## End Training (current age = 125000)</span></a>
+<a class="sourceLine" id="cb18-6" data-line-number="6"><span class="co">## ----------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb18-7" data-line-number="7"><span class="co">## SOM Recall:</span></a>
+<a class="sourceLine" id="cb18-8" data-line-number="8"><span class="co">## ++ finding BMUs of data ... done</span></a>
+<a class="sourceLine" id="cb18-9" data-line-number="9"><span class="co">## ++ building CADJ matrix ... done</span></a>
+<a class="sourceLine" id="cb18-10" data-line-number="10"><span class="co">## ++ setting RF_size ... done</span></a>
+<a class="sourceLine" id="cb18-11" data-line-number="11"><span class="co">## ++ calculating SOM Entropy ... done</span></a>
+<a class="sourceLine" id="cb18-12" data-line-number="12"><span class="co">## ++ populating RF_members ... done</span></a>
+<a class="sourceLine" id="cb18-13" data-line-number="13"><span class="co">## ++ setting lattice fences ... done</span></a>
+<a class="sourceLine" id="cb18-14" data-line-number="14">mysom<span class="op">$</span>age</a>
+<a class="sourceLine" id="cb18-15" data-line-number="15"><span class="co">## [1] 125000</span></a></code></pre></div>
+<p>Training should proceed until the user is satisfied with the SOM’s prototype development and neuron lattice organization. The learned SOM prototype vectors can be extracted from the SOM object via the <code>W</code> field, and should be mapped from internal to external network range if direct comparison to their representative data vectors is desired. Here, we extract the prototypes after the cumulative 125,000 learning steps performed above:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">W125k =<span class="st"> </span>mysom<span class="op">$</span>W </a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="co"># Return to external network (i.e, data) range </span></a>
+<a class="sourceLine" id="cb19-3" data-line-number="3">W125k =<span class="st"> </span>mysom<span class="op">$</span><span class="kw">map_from_netrng</span>(mysom<span class="op">$</span>W)</a></code></pre></div>
+<p>Standard online (i.e, not batch) SOM training requires random-order presentation of training data to the network at each training step. A user-specified presentation order for training can be achieved by calling the method <code>set_train_order</code> just prior to invoking <code>train_SOM</code>. <code>set_train_order</code> takes a vector of data indices (of length <code>nsteps</code>), which sets the order of the data picked for presentation to the network for the next <code>nsteps</code> training steps. Its input should be 1-based row indices of the training data matrix. Here, we train the above SOM for an additional 10,000 steps where data presentation to the network follows a spefic order:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">train_order =<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">10000</span></a>
+<a class="sourceLine" id="cb20-2" data-line-number="2">mysom<span class="op">$</span><span class="kw">set_train_order</span>(train_order)</a>
+<a class="sourceLine" id="cb20-3" data-line-number="3">mysom<span class="op">$</span><span class="kw">train_SOM</span>(<span class="dv">10000</span>, SHGR<span class="op">$</span>X)</a>
+<a class="sourceLine" id="cb20-4" data-line-number="4"><span class="co">## User-specified training order detected. nsteps reset to 10000</span></a>
+<a class="sourceLine" id="cb20-5" data-line-number="5"><span class="co">## SOM Training:</span></a>
+<a class="sourceLine" id="cb20-6" data-line-number="6"><span class="co">## ++ Reporting every 10000, monitoring every 0steps</span></a>
+<a class="sourceLine" id="cb20-7" data-line-number="7"><span class="co">## 1	</span></a>
+<a class="sourceLine" id="cb20-8" data-line-number="8"><span class="co">## End Training (current age = 135000)</span></a>
+<a class="sourceLine" id="cb20-9" data-line-number="9"><span class="co">## ----------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb20-10" data-line-number="10"><span class="co">## SOM Recall:</span></a>
+<a class="sourceLine" id="cb20-11" data-line-number="11"><span class="co">## ++ finding BMUs of data ... done</span></a>
+<a class="sourceLine" id="cb20-12" data-line-number="12"><span class="co">## ++ building CADJ matrix ... done</span></a>
+<a class="sourceLine" id="cb20-13" data-line-number="13"><span class="co">## ++ setting RF_size ... done</span></a>
+<a class="sourceLine" id="cb20-14" data-line-number="14"><span class="co">## ++ calculating SOM Entropy ... done</span></a>
+<a class="sourceLine" id="cb20-15" data-line-number="15"><span class="co">## ++ populating RF_members ... done</span></a>
+<a class="sourceLine" id="cb20-16" data-line-number="16"><span class="co">## ++ setting lattice fences ... done</span></a>
+<a class="sourceLine" id="cb20-17" data-line-number="17">mysom<span class="op">$</span>age</a>
+<a class="sourceLine" id="cb20-18" data-line-number="18"><span class="co">## [1] 135000</span></a></code></pre></div>
+<p>If a specific training order is supplied the number of steps argument to <code>train_SOM</code> is ignored, and the SOM is trained for <code>nsteps = length(train_order)</code>. Setting a training order is uncommon, useful mostly for experimentation and testing.</p>
+<p>More commonly a user may wish to retain random presentation of data to the network while also enforcing reproducibility. This can be achieved by calling R’s <code>set.seed</code> function just prior to <code>train_SOM</code>:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">1001</span>)</a>
+<a class="sourceLine" id="cb21-2" data-line-number="2">mysom<span class="op">$</span><span class="kw">train_SOM</span>(<span class="dv">10000</span>, SHGR<span class="op">$</span>X)</a>
+<a class="sourceLine" id="cb21-3" data-line-number="3"><span class="co">## SOM Training:</span></a>
+<a class="sourceLine" id="cb21-4" data-line-number="4"><span class="co">## ++ Reporting every 10000, monitoring every 0steps</span></a>
+<a class="sourceLine" id="cb21-5" data-line-number="5"><span class="co">## 1	</span></a>
+<a class="sourceLine" id="cb21-6" data-line-number="6"><span class="co">## End Training (current age = 145000)</span></a>
+<a class="sourceLine" id="cb21-7" data-line-number="7"><span class="co">## ----------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb21-8" data-line-number="8"><span class="co">## SOM Recall:</span></a>
+<a class="sourceLine" id="cb21-9" data-line-number="9"><span class="co">## ++ finding BMUs of data ... done</span></a>
+<a class="sourceLine" id="cb21-10" data-line-number="10"><span class="co">## ++ building CADJ matrix ... done</span></a>
+<a class="sourceLine" id="cb21-11" data-line-number="11"><span class="co">## ++ setting RF_size ... done</span></a>
+<a class="sourceLine" id="cb21-12" data-line-number="12"><span class="co">## ++ calculating SOM Entropy ... done</span></a>
+<a class="sourceLine" id="cb21-13" data-line-number="13"><span class="co">## ++ populating RF_members ... done</span></a>
+<a class="sourceLine" id="cb21-14" data-line-number="14"><span class="co">## ++ setting lattice fences ... done</span></a>
+<a class="sourceLine" id="cb21-15" data-line-number="15">mysom<span class="op">$</span>age</a>
+<a class="sourceLine" id="cb21-16" data-line-number="16"><span class="co">## [1] 145000</span></a></code></pre></div>
+</div>
+<div id="secRecall" class="section level2">
+<h2><span class="header-section-number">5.2</span> Network Recall</h2>
+<p>After training, the entire training set should be <strong>recalled</strong> through the SOM, via the method <code>recall_SOM</code>, which produes additional useful products of SOM learning. A call to <code>train_SOM</code> automatically ends with a recall, but the recall function is exposed to the user for completeness. Again, it must be given the entire training data matrix (which should match that supplied during <code>initialize_SOM</code> and <code>train_SOM</code>):</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">mysom<span class="op">$</span><span class="kw">recall_SOM</span>(SHGR<span class="op">$</span>X)</a>
+<a class="sourceLine" id="cb22-2" data-line-number="2"><span class="co">## SOM Recall:</span></a>
+<a class="sourceLine" id="cb22-3" data-line-number="3"><span class="co">## ++ finding BMUs of data ... done</span></a>
+<a class="sourceLine" id="cb22-4" data-line-number="4"><span class="co">## ++ building CADJ matrix ... done</span></a>
+<a class="sourceLine" id="cb22-5" data-line-number="5"><span class="co">## ++ setting RF_size ... done</span></a>
+<a class="sourceLine" id="cb22-6" data-line-number="6"><span class="co">## ++ calculating SOM Entropy ... done</span></a>
+<a class="sourceLine" id="cb22-7" data-line-number="7"><span class="co">## ++ populating RF_members ... done</span></a>
+<a class="sourceLine" id="cb22-8" data-line-number="8"><span class="co">## ++ setting lattice fences ... done</span></a></code></pre></div>
+<p>A recall populates several fields related to the SOM mapping, as described below.</p>
+<div id="bmu---som-forwad-map" class="section level3">
+<h3><span class="header-section-number">5.2.1</span> BMU - SOM Forwad Map</h3>
+<p>The BMU – or <strong>B</strong>est <strong>M</strong>atching <strong>U</strong>nit – of a data vector <span class="math inline">\(x_s\)</span> is the learned prototype index <span class="math inline">\(j^*\)</span> satisfying
+<span class="math display">\[ j^* = \arg\min_{j} \, d_E(w_j, x_s)^2 - b_j\]</span>
+where <span class="math inline">\(d_E(\cdot,\cdot)^2\)</span> is squared Euclidean distance between its vector arguments and <span class="math inline">\(b_j\)</span> is the learned per-prototype CSOM bias. For a variety of reasons it is useful to calculate and store at least the first and second BMUs (denoted BMU1 and BMU2) for each datum. In general, <span class="math inline">\(\text{BMU}[k](x_s)\)</span> = the k-th Best Matching Unit (prototype) for the datum indexed by <span class="math inline">\(s\)</span>. The field <code>nBMU</code> controls the number of BMUs computed and stored during recall, and can be set by the method <code>set_nBMU</code> prior to recall. A default <code>nBMU = 2</code> is set during a call to <code>initialize_SOM</code>. Here, we change the number of BMUs to 3, and repeat the recall:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">mysom<span class="op">$</span><span class="kw">set_nBMU</span>(<span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb23-2" data-line-number="2">mysom<span class="op">$</span><span class="kw">recall_SOM</span>(SHGR<span class="op">$</span>X)</a>
+<a class="sourceLine" id="cb23-3" data-line-number="3"><span class="co">## SOM Recall:</span></a>
+<a class="sourceLine" id="cb23-4" data-line-number="4"><span class="co">## ++ finding BMUs of data ... done</span></a>
+<a class="sourceLine" id="cb23-5" data-line-number="5"><span class="co">## ++ building CADJ matrix ... done</span></a>
+<a class="sourceLine" id="cb23-6" data-line-number="6"><span class="co">## ++ setting RF_size ... done</span></a>
+<a class="sourceLine" id="cb23-7" data-line-number="7"><span class="co">## ++ calculating SOM Entropy ... done</span></a>
+<a class="sourceLine" id="cb23-8" data-line-number="8"><span class="co">## ++ populating RF_members ... done</span></a>
+<a class="sourceLine" id="cb23-9" data-line-number="9"><span class="co">## ++ setting lattice fences ... done</span></a></code></pre></div>
+<p>Note that <code>nBMU</code> must be <span class="math inline">\(\geq 2\)</span>. The BMU information is stored in the field <code>BMU</code>, which is a matrix (nrows = <code>nX</code>, ncols = <code>nBMU</code>) whose (i,j) element gives the j-th BMU index (i.e., the j-th closest prototype) for the datum in row i of the training data matrix. This information can be access via</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">head</span>(mysom<span class="op">$</span>BMU)</a>
+<a class="sourceLine" id="cb24-2" data-line-number="2"><span class="co">##      [,1] [,2] [,3]</span></a>
+<a class="sourceLine" id="cb24-3" data-line-number="3"><span class="co">## [1,]    8    9   10</span></a>
+<a class="sourceLine" id="cb24-4" data-line-number="4"><span class="co">## [2,]   10   31   51</span></a>
+<a class="sourceLine" id="cb24-5" data-line-number="5"><span class="co">## [3,]   10    9   31</span></a>
+<a class="sourceLine" id="cb24-6" data-line-number="6"><span class="co">## [4,]   51   31   72</span></a>
+<a class="sourceLine" id="cb24-7" data-line-number="7"><span class="co">## [5,]    9    8   10</span></a>
+<a class="sourceLine" id="cb24-8" data-line-number="8"><span class="co">## [6,]   72   52   51</span></a></code></pre></div>
+<p><code>BMU</code> stores the <em>forward</em> SOM mapping; that is, the mapping produced from the network <em>input space</em> (i.e., data space, or <span class="math inline">\(\mathbb{R}^d\)</span>), to the network <em>output space</em> (i.e, the neurons on the SOM lattice).</p>
+</div>
+<div id="rf_members---som-reverse-map" class="section level3">
+<h3><span class="header-section-number">5.2.2</span> RF_members - SOM Reverse Map</h3>
+<p>The <em>reverse</em> SOM mapping is also stored during <code>recall_SOM</code> in the field <code>RF_members</code>, where the prefix “RF” stands for <strong>R</strong>eceptive <strong>F</strong>ield . This field identifies the mapping from SOM <em>output space</em> to <em>input space</em>, represented by a list of <code>length = nW</code> whose i-th entry is a vector of the 1-based data indices (rows of the training data matrix) for whom prototype i is BMU1. For example, the data indices in the Receptive Field of prototype index 10 can be accessed via</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">mysom<span class="op">$</span>RF_members[[<span class="dv">10</span>]]</a>
+<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="co">##   [1]    2    3   11  150  265  269  278  283  386  391  397  403  411  414  514</span></a>
+<a class="sourceLine" id="cb25-3" data-line-number="3"><span class="co">##  [16]  518  523  531  542  644  647  649  650  658  668  670  671  770  776  792</span></a>
+<a class="sourceLine" id="cb25-4" data-line-number="4"><span class="co">##  [31]  797  900  902  915 1157 1162 1163 1170 1171 1174 1175 1177 1178 1281 1295</span></a>
+<a class="sourceLine" id="cb25-5" data-line-number="5"><span class="co">##  [46] 1303 1412 1425 1432 1545 1550 1551 1553 1568 1665 1666 1675 1684 1690 1692</span></a>
+<a class="sourceLine" id="cb25-6" data-line-number="6"><span class="co">##  [61] 1696 1793 1800 1813 1815 1818 1929 1931 1935 1937 1938 1941 1947 2063 2185</span></a>
+<a class="sourceLine" id="cb25-7" data-line-number="7"><span class="co">##  [76] 2190 2196 2308 2314 2322 2323 2433 2435 2444 2445 2570 2574 2592 2690 2693</span></a>
+<a class="sourceLine" id="cb25-8" data-line-number="8"><span class="co">##  [91] 2699 2826 2952 2961 2964 2966 2970 2976 3074 3076 3077 3079 3098 3099 3205</span></a>
+<a class="sourceLine" id="cb25-9" data-line-number="9"><span class="co">## [106] 3225 3228 3232 3345 3347 3349 3458 3472 3475 3483 3484 3589 3599 3601 3603</span></a>
+<a class="sourceLine" id="cb25-10" data-line-number="10"><span class="co">## [121] 3615 3719 3725 3727 3733 3858 3860 3866 3982 3983 3996</span></a></code></pre></div>
+<p>While CSOM attempts an equiprobable quantization of the entire training set by the prototypes, some prototypes will have empty Receptive Fields (meaning they do not quantize any data). If prototype <span class="math inline">\(j\)</span>’s Receptive Field is empty, then <code>RF_members[[j]]</code> is an empty vector (of length = 0).</p>
+</div>
+<div id="rf_size" class="section level3">
+<h3><span class="header-section-number">5.2.3</span> RF_size</h3>
+<p>The size of a prototype’s receptive field is the number of datum it quantizes (the size of <code>RF_members[[j]]</code>). This information is stored in the field <code>RF_size</code>, accessible via</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">head</span>(mysom<span class="op">$</span>RF_size, <span class="dt">n=</span><span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb26-2" data-line-number="2"><span class="co">##       [,1]</span></a>
+<a class="sourceLine" id="cb26-3" data-line-number="3"><span class="co">##  [1,]   83</span></a>
+<a class="sourceLine" id="cb26-4" data-line-number="4"><span class="co">##  [2,]   50</span></a>
+<a class="sourceLine" id="cb26-5" data-line-number="5"><span class="co">##  [3,]   81</span></a>
+<a class="sourceLine" id="cb26-6" data-line-number="6"><span class="co">##  [4,]    0</span></a>
+<a class="sourceLine" id="cb26-7" data-line-number="7"><span class="co">##  [5,]   30</span></a>
+<a class="sourceLine" id="cb26-8" data-line-number="8"><span class="co">##  [6,]  141</span></a>
+<a class="sourceLine" id="cb26-9" data-line-number="9"><span class="co">##  [7,]    0</span></a>
+<a class="sourceLine" id="cb26-10" data-line-number="10"><span class="co">##  [8,]   62</span></a>
+<a class="sourceLine" id="cb26-11" data-line-number="11"><span class="co">##  [9,]   59</span></a>
+<a class="sourceLine" id="cb26-12" data-line-number="12"><span class="co">## [10,]  131</span></a></code></pre></div>
+<p>Note that <code>sum(RF_size) = nX</code> (all data are represented by <em>some</em> prototype, hence the sum of the sizes of all prototype’s Receptive Fields must equal the training sample size). <code>RF_size</code> is useful both in analysis and visualization, as large deviations in Receptive Field size between neighboring lattice neurons can indicate cluster boundaries or pattern transitions on the SOM.</p>
+</div>
+<div id="quantization-error" class="section level3">
+<h3><span class="header-section-number">5.2.4</span> Quantization Error</h3>
+<p>The distance between a datum <span class="math inline">\(x_s\)</span> and its BMU <span class="math inline">\(j^*\)</span> represents the Quantization Error induced by quantizing <span class="math inline">\(x_s\)</span> by <span class="math inline">\(w_{j^*}\)</span>. These (squared) distances are computed during BMU selection and stored in the field <code>SQE</code>, which is a vector (length = <code>nX</code>) of the <strong>S</strong>quared <strong>Q</strong>uantization <strong>E</strong>rror arising from the SOM mapping, accessible via</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="kw">str</span>(mysom<span class="op">$</span>SQE)</a>
+<a class="sourceLine" id="cb27-2" data-line-number="2"><span class="co">##  num [1:16384, 1] 0.0927 0.0843 0.0604 0.1515 0.1142 ...</span></a></code></pre></div>
+</div>
+<div id="entropy" class="section level3">
+<h3><span class="header-section-number">5.2.5</span> Entropy</h3>
+<p>The normalized entropy of the forward SOM mapping is stored in the field <code>Entropy</code>. The discrete representation of the manifold from which the training data was drawn drives this entropy calculation, defined as
+<span class="math display">\[ \text{Entropy} = \frac{1}{\log_2(nW)} \sum\limits_{j=1}^{nW} \frac{\text{RF\_size}_j}{nX} \times \log_2\left( \frac{\text{RF\_size}_j}{nX} \right)\]</span>
+The above is normalized so that <span class="math inline">\(0 \leq \text{Entropy} \leq 1\)</span>, and <span class="math inline">\(\text{Entropy} = 1\)</span> means all prototypes quantize the same number of training data vectors. The normalized entropy of the current SOM mapping is accessible via</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">mysom<span class="op">$</span>Entropy</a>
+<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="co">## [1] 0.9461503</span></a></code></pre></div>
+</div>
+<div id="u-matrix-fences" class="section level3">
+<h3><span class="header-section-number">5.2.6</span> U-Matrix Fences</h3>
+<p>The U-Matrix <span class="citation">[<a href="#ref-UMatrix">5</a>]</span> and mU-Matrix <span class="citation">[<a href="#ref-MerenyiJainVillmann">6</a>]</span> visualizations require computing distances between all prototypes whose neurons are lattice-adjacenct. This is done automatically during <code>recall_SOM</code> using the learned prototype vectors in <code>W</code> and the lattice adjacency matrix <code>nu_ADJ</code>. The results are stored in the field <code>fences</code>, which is a data frame whose rows represent individual fence information of the form</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw">head</span>(mysom<span class="op">$</span>fences)</a>
+<a class="sourceLine" id="cb29-2" data-line-number="2"><span class="co">##   i j  x0        y0  x1       y1       value</span></a>
+<a class="sourceLine" id="cb29-3" data-line-number="3"><span class="co">## 1 1 2 1.5 0.7113249 1.5 1.288675 0.011281060</span></a>
+<a class="sourceLine" id="cb29-4" data-line-number="4"><span class="co">## 2 2 3 2.5 0.7113249 2.5 1.288675 0.011196895</span></a>
+<a class="sourceLine" id="cb29-5" data-line-number="5"><span class="co">## 3 3 4 3.5 0.7113249 3.5 1.288675 2.898032735</span></a>
+<a class="sourceLine" id="cb29-6" data-line-number="6"><span class="co">## 4 4 5 4.5 0.7113249 4.5 1.288675 0.432551597</span></a>
+<a class="sourceLine" id="cb29-7" data-line-number="7"><span class="co">## 5 5 6 5.5 0.7113249 5.5 1.288675 0.003857276</span></a>
+<a class="sourceLine" id="cb29-8" data-line-number="8"><span class="co">## 6 6 7 6.5 0.7113249 6.5 1.288675 2.707473984</span></a></code></pre></div>
+<p>The columns <code>i</code> and <code>j</code> give the two neurons (their indices) which are separated by the fence in each row; the columns <code>x0</code>, <code>y0</code>, <code>x1</code>, <code>y1</code> give the <span class="math inline">\((x,y)\)</span> coordinates of the endpoints of each fence (as visualized on the lattice); the <code>value</code> column stores the squared Euclidean distance between prototypes <span class="math inline">\(W_i\)</span> and <span class="math inline">\(W_j\)</span>. This data frame can be populated by a separate call to method <code>set_lattice_fences</code> but this is generally unnecessary as it is done automatically in <code>recall_SOM</code>.</p>
+</div>
+<div id="cadj-conn" class="section level3">
+<h3><span class="header-section-number">5.2.7</span> CADJ &amp; CONN</h3>
+<p>The CADJ matrix <span class="citation">[<a href="#ref-TasdemirMerenyi2009">3</a>]</span> is a weighted adjacency matrix of SOM prototypes (neurons) whose <span class="math inline">\((i,j)\)</span> elements are defined by
+<span class="math display">\[ \text{CADJ}_{ij} = \#\{x_s \, : \, BMU1(x_s)=i \text{ and } BMU2(x_s)=j \}. \]</span>
+Thus, the matrix entries count the number of data vectors for whom prototype <span class="math inline">\(i\)</span> is first-BMU and <span class="math inline">\(j\)</span> is second-BMU. This matrix, when visualized on the SOM lattice, is useful for inferring the topological (dis-)connectivities of the manifold underlying the data <span class="math inline">\(X\)</span> in <span class="math inline">\(\mathbb{R}^d\)</span>. It is accessible via the <code>CADJ</code> field of a recalled SOM object:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">str</span>(mysom<span class="op">$</span>CADJ)</a>
+<a class="sourceLine" id="cb30-2" data-line-number="2"><span class="co">##  num [1:410, 1:410] 0 13 0 0 0 0 0 0 0 0 ...</span></a></code></pre></div>
+<p>Its symmetrized version, called CONN, is also accessible. Since <span class="math inline">\(CONN = CADJ + CADJ^T\)</span> it is never stored in the SOM object, merely recreated upon demand. As such, CONN is accessible by calling the <code>CONN</code> <em>method</em> (not field):</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="kw">str</span>(mysom<span class="op">$</span><span class="kw">CONN</span>())</a>
+<a class="sourceLine" id="cb31-2" data-line-number="2"><span class="co">##  num [1:410, 1:410] 0 35 0 0 0 0 0 0 0 0 ...</span></a></code></pre></div>
+</div>
+</div>
+<div id="recalling-labeled-data" class="section level2">
+<h2><span class="header-section-number">5.3</span> Recalling Labeled Data</h2>
+<p>If the training data possesses associated discrete labels (such as cluster or class membership) it is often helpful to propagate these labels through the forward SOM mapping (which is known as “labeling the prototypes”) to assess the organization of the lattice, determine the quality of the labels, or both. <em>If</em> the labels are meaningful (such that they define genuinely distinct data classes or clusters), and <em>if</em> SOM learning is adequate (i.e., performed correctly over enough training steps), then one expects an organization of prototype labels on the lattice. Propagation of data labels through the SOM is achieved by the method <code>set_RF_label</code>, which takes a vector of character labels, with one entry for every row of the training data <span class="math inline">\(X\)</span>. Using the labels of the example SHGR data stored in <code>SHGR$label</code>, label propagation is performed via</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1">mysom<span class="op">$</span><span class="kw">set_RF_label</span>(SHGR<span class="op">$</span>label)</a></code></pre></div>
+<p>The above method sets two different fields of the <code>SOM</code> object:</p>
+<ul>
+<li><code>RF_label_dist</code> is a list (length = <code>nW</code>) of named integer vectors representing the distribution (contingency count) of the labels mapped to each prototype’s Receptive Field. The <code>names</code> attribute of the vector stores the label whereas the vector elements store the associated count. Obviously, the sum of this vector equals the corresponding <code>RF_size</code>.</li>
+<li><code>RF_label</code> is a character vector (length = <code>nW</code>) of the “winning label” in each RF, which is the plurality winning label of each RF’s distribution (found in <code>RF_label_dist</code>). The plurality winner for a RF is the label with highest contingency count.</li>
+</ul>
+<p>For example, the table of label counts and the plurality label of the first prototype in the SHGR SOM are:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">mysom<span class="op">$</span>RF_label_dist[[<span class="dv">1</span>]]</a>
+<a class="sourceLine" id="cb33-2" data-line-number="2"><span class="co">##  J </span></a>
+<a class="sourceLine" id="cb33-3" data-line-number="3"><span class="co">## 83</span></a>
+<a class="sourceLine" id="cb33-4" data-line-number="4">mysom<span class="op">$</span>RF_label[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb33-5" data-line-number="5"><span class="co">## [1] &quot;J&quot;</span></a></code></pre></div>
+<p>These fields are primarily useful for label visualization, discussed in Section <a href="secVis.html#secVis">6</a>? The SOM object must be trained (and recalled) prior to calling <code>set_RF_label</code>.</p>
+</div>
+<div id="monitoring-learning" class="section level2">
+<h2><span class="header-section-number">5.4</span> Monitoring Learning</h2>
+<p>While there is no universal criteria to determine the number of training steps required for an SOM to properly learn and represent arbitrary manifolds there are a few rules of thumb which help assess the suitability of such learning. During training the SOM undergoes two phases: the initial <em>organization</em> phase aligns the neurons on the lattice such that the resulting mapping is <em>topology preserving</em> (which usually occurs relatively quickly) while the <em>convergence</em> phase further develops the prototypes to best represent the input data (which can take quite some time, depending on the learning parameters used). As a vector quantizer, the SOM should be trained until it is stable and represents the input data reasonably well. To assess these criteria snapshots of the SOM mapping can be taken at various points in (training) time and compared to each other to determine a suitable point at which to terminate training.</p>
+<p>The first criterion above is represented by the QSI – or <strong>Q</strong>uantization <strong>S</strong>tability <strong>I</strong>ndex – which, at any snapshot time step <span class="math inline">\(\tau\)</span>, reports the proportion of data vectors whose BMUs have changed since the previous snapshot at time <span class="math inline">\(\tau - 1\)</span>. That is,
+<span class="math display">\[ QSI(\tau) = \frac{1}{nX} \sum\limits_{s=1}^{nX} \#\{ BMU_{\tau-1}(x_s) \, \neq \, BMU_{\tau}(x_s) \}\]</span>
+As proper learning proceeds over time we expect <span class="math inline">\(QSI(\tau) \to 0\)</span>. The second criterion above is captured by the overall RMSQE – or <strong>R</strong>oot <strong>M</strong>ean <strong>S</strong>quare <strong>Q</strong>uantization <strong>E</strong>rror – of the mapping, which is the root average of the <code>SQE</code> of each data vector (as explained in Section <a href="som-learning.html#secRecall">5.2</a>). At snapshot time <span class="math inline">\(\tau\)</span> this is
+<span class="math display">\[ RMSQE(\tau) = \sqrt{ \frac{1}{nX} \sum\limits_{s=1}^{nX} d_E^2(x_s, w_{j^*_{\tau}}) } \]</span>
+where <span class="math inline">\(d_E^2(\cdot,\cdot)\)</span> is squared Euclidean distance and the notation <span class="math inline">\(w_{j^*_{\tau}}\)</span> denotes the prevailing prototype BMU of data vector <span class="math inline">\(x_s\)</span> at snapshot time <span class="math inline">\(\tau\)</span>.Conscience-SOM learning provides a third suitable metric to assess the quality of SOM training. Designed to produce maximum-entropy SOM mappings, a CSOM should be trained until its Entropy (section <a href="som-learning.html#secRecall">5.2</a>) is maximal, or at least has stabilized at some near-maximal plateau.</p>
+<p>Monitoring of these quantities can be activated prior to SOM training via the method <code>set_monitoring_freq</code>, which takes as argument the <em>incremental</em> number of steps between monitoring snapshots and stores this argument in the field <code>mtr_freq</code>. By default, <code>initialize_SOM</code> sets <code>mtr_freq = 0</code> which means no monitoring is performed. Here, we reset the SHGR SOM and repeat training for 100,000 steps with monitoring activated at every 10,000 steps:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="co"># Initialize the SOM </span></a>
+<a class="sourceLine" id="cb34-2" data-line-number="2">mysom =<span class="st"> </span>SOM<span class="op">$</span><span class="kw">new</span>()</a>
+<a class="sourceLine" id="cb34-3" data-line-number="3">mysom<span class="op">$</span><span class="kw">initialize_SOM</span>(SHGR<span class="op">$</span>X, <span class="dv">20</span>, <span class="dv">20</span>, <span class="st">&quot;hex&quot;</span>)</a>
+<a class="sourceLine" id="cb34-4" data-line-number="4"><span class="co">## Setting lattice quantities</span></a>
+<a class="sourceLine" id="cb34-5" data-line-number="5"><span class="co">## ++ calculating lattice (x,y) coordinates ... done</span></a>
+<a class="sourceLine" id="cb34-6" data-line-number="6"><span class="co">## ++ calculating neuron lattice adjacencies ... done</span></a>
+<a class="sourceLine" id="cb34-7" data-line-number="7"><span class="co">## ++ calculating geodesic lattice distances between neurons ... done</span></a>
+<a class="sourceLine" id="cb34-8" data-line-number="8"><span class="co">## ++ assigning geodesic lattice distances to distlist ... done</span></a>
+<a class="sourceLine" id="cb34-9" data-line-number="9"><span class="co">## ++ calculating lattice tile vertices ... done</span></a>
+<a class="sourceLine" id="cb34-10" data-line-number="10"><span class="co">## ----------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb34-11" data-line-number="11"><span class="co">## Setting training data</span></a>
+<a class="sourceLine" id="cb34-12" data-line-number="12"><span class="co">## ----------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb34-13" data-line-number="13"><span class="co">## Setting network ranges</span></a>
+<a class="sourceLine" id="cb34-14" data-line-number="14"><span class="co">## ++ external = [-115.19, 1347.57]</span></a>
+<a class="sourceLine" id="cb34-15" data-line-number="15"><span class="co">## ++ internal = [0.00, 1.00]</span></a>
+<a class="sourceLine" id="cb34-16" data-line-number="16"><span class="co">## ++ change defaults via $set_netrng</span></a>
+<a class="sourceLine" id="cb34-17" data-line-number="17"><span class="co">## ----------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb34-18" data-line-number="18"><span class="co">## Initializing prototypes to random uniform</span></a>
+<a class="sourceLine" id="cb34-19" data-line-number="19"><span class="co">## ++ to set a particular random seed call set.seed() and then $set_W_runif()</span></a>
+<a class="sourceLine" id="cb34-20" data-line-number="20"><span class="co">## ++ to set to specific values call $set_W()</span></a>
+<a class="sourceLine" id="cb34-21" data-line-number="21"><span class="co">## ----------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb34-22" data-line-number="22"><span class="co">## Initializing prototype win frequencies to equiprobable</span></a>
+<a class="sourceLine" id="cb34-23" data-line-number="23"><span class="co">## ++ to set to specific values call $set_p(values)</span></a>
+<a class="sourceLine" id="cb34-24" data-line-number="24"><span class="co">## ----------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb34-25" data-line-number="25"><span class="co">## Setting default learning rates</span></a>
+<a class="sourceLine" id="cb34-26" data-line-number="26"><span class="co">## Storing the annealing schedule as:</span></a>
+<a class="sourceLine" id="cb34-27" data-line-number="27"><span class="co">## t	alpha	beta	gamma	sigma</span></a>
+<a class="sourceLine" id="cb34-28" data-line-number="28"><span class="co">## 16384	0.50	0.05	0.01	3</span></a>
+<a class="sourceLine" id="cb34-29" data-line-number="29"><span class="co">## 81920	0.25	0.03	0.00	2</span></a>
+<a class="sourceLine" id="cb34-30" data-line-number="30"><span class="co">## 163840	0.10	0.01	0.00	1</span></a>
+<a class="sourceLine" id="cb34-31" data-line-number="31"><span class="co">## 409600	0.05	0.01	0.00	1</span></a>
+<a class="sourceLine" id="cb34-32" data-line-number="32"><span class="co">## 1638400	0.01	0.00	0.00	1</span></a>
+<a class="sourceLine" id="cb34-33" data-line-number="33"><span class="co">## ++ change via $get_LRAS and $set_LRAS</span></a>
+<a class="sourceLine" id="cb34-34" data-line-number="34"><span class="co">## ----------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb34-35" data-line-number="35"></a>
+<a class="sourceLine" id="cb34-36" data-line-number="36"><span class="co"># Set the desired snapshot window </span></a>
+<a class="sourceLine" id="cb34-37" data-line-number="37">mysom<span class="op">$</span><span class="kw">set_monitoring_freq</span>(<span class="dv">10000</span>)</a>
+<a class="sourceLine" id="cb34-38" data-line-number="38">mysom<span class="op">$</span>mtr_freq</a>
+<a class="sourceLine" id="cb34-39" data-line-number="39"><span class="co">## [1] 10000</span></a>
+<a class="sourceLine" id="cb34-40" data-line-number="40"></a>
+<a class="sourceLine" id="cb34-41" data-line-number="41"><span class="co"># Train </span></a>
+<a class="sourceLine" id="cb34-42" data-line-number="42">mysom<span class="op">$</span><span class="kw">train_SOM</span>(<span class="dv">100000</span>, SHGR<span class="op">$</span>X)</a>
+<a class="sourceLine" id="cb34-43" data-line-number="43"><span class="co">## SOM Training:</span></a>
+<a class="sourceLine" id="cb34-44" data-line-number="44"><span class="co">## ++ Reporting every 10000, monitoring every 10000steps</span></a>
+<a class="sourceLine" id="cb34-45" data-line-number="45"><span class="co">## 1	2	3	4	5	6	7	8	</span></a>
+<a class="sourceLine" id="cb34-46" data-line-number="46"><span class="co">## 9	10	</span></a>
+<a class="sourceLine" id="cb34-47" data-line-number="47"><span class="co">## End Training (current age = 100000)</span></a>
+<a class="sourceLine" id="cb34-48" data-line-number="48"><span class="co">## ----------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb34-49" data-line-number="49"><span class="co">## SOM Recall:</span></a>
+<a class="sourceLine" id="cb34-50" data-line-number="50"><span class="co">## ++ finding BMUs of data ... done</span></a>
+<a class="sourceLine" id="cb34-51" data-line-number="51"><span class="co">## ++ building CADJ matrix ... done</span></a>
+<a class="sourceLine" id="cb34-52" data-line-number="52"><span class="co">## ++ setting RF_size ... done</span></a>
+<a class="sourceLine" id="cb34-53" data-line-number="53"><span class="co">## ++ calculating SOM Entropy ... done</span></a>
+<a class="sourceLine" id="cb34-54" data-line-number="54"><span class="co">## ++ populating RF_members ... done</span></a>
+<a class="sourceLine" id="cb34-55" data-line-number="55"><span class="co">## ++ setting lattice fences ... done</span></a></code></pre></div>
+<p>The status message displayed during training will indicate the monitoring frequency. After training, the monitored quantities can be extracted via:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="co"># The training ages at which snapshots were taken</span></a>
+<a class="sourceLine" id="cb35-2" data-line-number="2"><span class="kw">head</span>(mysom<span class="op">$</span>mtr_age)</a>
+<a class="sourceLine" id="cb35-3" data-line-number="3"><span class="co">## [1] 10000 20000 30000 40000 50000 60000</span></a>
+<a class="sourceLine" id="cb35-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb35-5" data-line-number="5"><span class="co"># The QSI at each monitoring snapshot. </span></a>
+<a class="sourceLine" id="cb35-6" data-line-number="6"><span class="co"># By convention, the first QSI is NA because it compares two snapshots</span></a>
+<a class="sourceLine" id="cb35-7" data-line-number="7"><span class="kw">head</span>(mysom<span class="op">$</span>mtr_QSI)</a>
+<a class="sourceLine" id="cb35-8" data-line-number="8"><span class="co">## [1]        NA 0.9555664 0.9020996 0.9281616 0.9133301 0.9232788</span></a>
+<a class="sourceLine" id="cb35-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb35-10" data-line-number="10"><span class="co"># The RMSQE at each monitoring snapshot</span></a>
+<a class="sourceLine" id="cb35-11" data-line-number="11"><span class="kw">head</span>(mysom<span class="op">$</span>mtr_RMSQE)</a>
+<a class="sourceLine" id="cb35-12" data-line-number="12"><span class="co">## [1] 0.3364690 0.3166922 0.3168527 0.3184309 0.3154855 0.3167003</span></a>
+<a class="sourceLine" id="cb35-13" data-line-number="13"></a>
+<a class="sourceLine" id="cb35-14" data-line-number="14"><span class="co"># The Entropies at each monitoring snapshot</span></a>
+<a class="sourceLine" id="cb35-15" data-line-number="15"><span class="kw">head</span>(mysom<span class="op">$</span>mtr_Entropy)</a>
+<a class="sourceLine" id="cb35-16" data-line-number="16"><span class="co">## [1] 0.8070174 0.8952083 0.8826630 0.8791978 0.8933543 0.8902079</span></a></code></pre></div>
+<p>These quantities can be visualized as time series for user analysis (see Section <a href="secVis.html#secVis">6</a>).</p>
+<p><strong>Note:</strong> Most of the recall quantities described above will be computed at each monitoring snapshot. Care should be taken to set <code>mtr_freq</code> appropriately: it should be small enough to capture meaningful trends in the monitored quantities but also large enough to not incur substantial increase in training time, as the recall is a computationally expensive part of SOM learning.</p>
+</div>
+<div id="parallel-processing" class="section level2">
+<h2><span class="header-section-number">5.5</span> Parallel Processing</h2>
+<p>SOMDisco’s parallel implementation is supported by <a href="https://cran.r-project.org/web/packages/RcppParallel/index.html">RcppParallel</a>. By default, <code>initialize_SOM</code> activates parallel computation of all possible quantities involved in SOM training and recall. For online (sequential) SOM training, this includes BMU selection and prototype updates at each training step. Most recall quantities can be processed in parallel.</p>
+<p>The <code>parallel</code> field of an instantiated SOM object controls whether computation is performed in parallel. To disable parallel processing, the <code>set_parallel</code> method can be used to set <code>parallel = FALSE</code>:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" data-line-number="1"><span class="co"># View existint parallel status </span></a>
+<a class="sourceLine" id="cb36-2" data-line-number="2">mysom<span class="op">$</span>parallel</a>
+<a class="sourceLine" id="cb36-3" data-line-number="3"><span class="co">## [1] TRUE</span></a>
+<a class="sourceLine" id="cb36-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb36-5" data-line-number="5"><span class="co"># To disable </span></a>
+<a class="sourceLine" id="cb36-6" data-line-number="6">mysom<span class="op">$</span><span class="kw">set_parallel</span>(<span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb36-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb36-8" data-line-number="8"><span class="co"># Check </span></a>
+<a class="sourceLine" id="cb36-9" data-line-number="9">mysom<span class="op">$</span>parallel </a>
+<a class="sourceLine" id="cb36-10" data-line-number="10"><span class="co">## [1] FALSE</span></a></code></pre></div>
+<p>Machine specific threading can be controlled via RcppParallel functions. To control the number of threads made available for parallel processing, see <code>?RcppParallel::defaultNumThreads</code> and <code>?RcppParallel::setThreadOptions</code>. When SOMDisco is loaded (via <code>library(SOMDisco)</code>), the following command is issued to the current R environment, which reserves one thread from processing for other uses:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">RcppParallel<span class="op">::</span><span class="kw">setThreadOptions</span>(<span class="dt">numThreads =</span> RcppParallel<span class="op">::</span><span class="kw">defaultNumThreads</span>() <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</a></code></pre></div>
+</div>
+<div id="saving-loading" class="section level2">
+<h2><span class="header-section-number">5.6</span> Saving &amp; Loading</h2>
+<p>Trained SOM objects can be saved to disk for future access via the <code>save</code> method. This method requires a user-specified file name and <strong>must have extension <code>.som</code></strong>.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="co"># Save method, filename must have .som extension </span></a>
+<a class="sourceLine" id="cb38-2" data-line-number="2">mysom<span class="op">$</span><span class="kw">save</span>(<span class="st">&quot;mysom.som&quot;</span>)</a></code></pre></div>
+<p>While the file has extension <code>.som</code> it is saved in R’s binary <code>.rds</code> format as a list. R’s <code>load</code> command <em>can</em> be used to return this list to the user’s environment in a new R session, but the pointers to the C++ object are destroyed on exit of the first session. The <code>load</code> method will properly restore a trained and previously saved SOM object to memory. Once loaded all object methods are available. For example, we can load the previously saved SOM and continue training (with the same SHGR data):</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="co"># Load the prevoiusly saved .som file </span></a>
+<a class="sourceLine" id="cb39-2" data-line-number="2">mysom2 =<span class="st"> </span>SOMDisco<span class="op">::</span>SOM<span class="op">$</span><span class="kw">new</span>() </a>
+<a class="sourceLine" id="cb39-3" data-line-number="3">mysom2<span class="op">$</span><span class="kw">load</span>(<span class="st">&quot;mysom.som&quot;</span>)</a>
+<a class="sourceLine" id="cb39-4" data-line-number="4"><span class="co">## ++ calculating lattice (x,y) coordinates ... done</span></a>
+<a class="sourceLine" id="cb39-5" data-line-number="5"><span class="co">## ++ calculating neuron lattice adjacencies ... done</span></a>
+<a class="sourceLine" id="cb39-6" data-line-number="6"><span class="co">## ++ calculating geodesic lattice distances between neurons ... done</span></a>
+<a class="sourceLine" id="cb39-7" data-line-number="7"><span class="co">## ++ assigning geodesic lattice distances to distlist ... done</span></a>
+<a class="sourceLine" id="cb39-8" data-line-number="8"><span class="co">## ++ calculating lattice tile vertices ... done</span></a>
+<a class="sourceLine" id="cb39-9" data-line-number="9"><span class="co">## Storing the annealing schedule as:</span></a>
+<a class="sourceLine" id="cb39-10" data-line-number="10"><span class="co">## t	alpha	beta	gamma	sigma</span></a>
+<a class="sourceLine" id="cb39-11" data-line-number="11"><span class="co">## 16384	0.50	0.05	0.01	3</span></a>
+<a class="sourceLine" id="cb39-12" data-line-number="12"><span class="co">## 81920	0.25	0.03	0.00	2</span></a>
+<a class="sourceLine" id="cb39-13" data-line-number="13"><span class="co">## 163840	0.10	0.01	0.00	1</span></a>
+<a class="sourceLine" id="cb39-14" data-line-number="14"><span class="co">## 409600	0.05	0.01	0.00	1</span></a>
+<a class="sourceLine" id="cb39-15" data-line-number="15"><span class="co">## 1638400	0.01	0.00	0.00	1</span></a>
+<a class="sourceLine" id="cb39-16" data-line-number="16"></a>
+<a class="sourceLine" id="cb39-17" data-line-number="17"><span class="co"># Check that it is the same</span></a>
+<a class="sourceLine" id="cb39-18" data-line-number="18">mysom2<span class="op">$</span>age </a>
+<a class="sourceLine" id="cb39-19" data-line-number="19"><span class="co">## [1] 1e+05</span></a>
+<a class="sourceLine" id="cb39-20" data-line-number="20"></a>
+<a class="sourceLine" id="cb39-21" data-line-number="21"><span class="co"># Re-train for another 10000 steps </span></a>
+<a class="sourceLine" id="cb39-22" data-line-number="22">mysom2<span class="op">$</span><span class="kw">train_SOM</span>(<span class="dv">10000</span>, SHGR<span class="op">$</span>X)</a>
+<a class="sourceLine" id="cb39-23" data-line-number="23"><span class="co">## SOM Training:</span></a>
+<a class="sourceLine" id="cb39-24" data-line-number="24"><span class="co">## ++ Reporting every 10000, monitoring every 10000steps</span></a>
+<a class="sourceLine" id="cb39-25" data-line-number="25"><span class="co">## 1	</span></a>
+<a class="sourceLine" id="cb39-26" data-line-number="26"><span class="co">## End Training (current age = 110000)</span></a>
+<a class="sourceLine" id="cb39-27" data-line-number="27"><span class="co">## ----------------------------------------------------------------</span></a>
+<a class="sourceLine" id="cb39-28" data-line-number="28"><span class="co">## SOM Recall:</span></a>
+<a class="sourceLine" id="cb39-29" data-line-number="29"><span class="co">## ++ finding BMUs of data ... done</span></a>
+<a class="sourceLine" id="cb39-30" data-line-number="30"><span class="co">## ++ building CADJ matrix ... done</span></a>
+<a class="sourceLine" id="cb39-31" data-line-number="31"><span class="co">## ++ setting RF_size ... done</span></a>
+<a class="sourceLine" id="cb39-32" data-line-number="32"><span class="co">## ++ calculating SOM Entropy ... done</span></a>
+<a class="sourceLine" id="cb39-33" data-line-number="33"><span class="co">## ++ populating RF_members ... done</span></a>
+<a class="sourceLine" id="cb39-34" data-line-number="34"><span class="co">## ++ setting lattice fences ... done</span></a></code></pre></div>
+
+</div>
+</div>
+<h3>References</h3>
+<div id="refs" class="references">
+<div id="ref-TasdemirMerenyi2009">
+<p>[3] K. Taşdemir and E. Merényi, “Exploiting data topology in visualization and clustering of self-organizing maps,” <em>IEEE Transactions on Neural Networks</em>, vol. 20, no. 4, pp. 549–562, 2009.</p>
+</div>
+<div id="ref-UMatrix">
+<p>[5] A. Ultsch and H. P. Siemon, “Kohonen’s self organizing feature maps for exploratory data analysis,” in <em>Proceedings of the international neural network conference (innc-90), paris, france, july 9–13, 1990 1. Dordrecht, netherlands</em>, 1990, vol. 1, pp. 305–308.</p>
+</div>
+<div id="ref-MerenyiJainVillmann">
+<p>[6] E. Merényi, A. Jain, and T. Villmann, “Explicit magnification control of self-organizing maps for ‘forbidden’ data,” <em>IEEE Transactions on Neural Networks</em>, vol. 18, no. 3, pp. 786–797, 2007.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="som-initialization.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="secVis.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["SOMDisco.README.pdf"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
