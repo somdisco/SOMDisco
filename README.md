@@ -17,4 +17,4 @@ devtools::install_github("somdisco/SOMDisco")
 
 # Documentation
 
-See the [SOMDisco homepage](https://somdisco.github.io/SOMDiscoR/output/index.html) for more information.
+See the [SOMDisco homepage](https://somdisco.github.io/SOMDisco/output/index.html) for more information.
