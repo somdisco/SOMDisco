@@ -1047,8 +1047,7 @@ vis_som_CADJvis = function(SOM, TRN, add = F, nu.pch = 16, nu.cex = 1, nu.col = 
 vis_som_TopoView = function(SOM, ADJ, add = F, nu.pch = 16, nu.cex = 1, nu.col = "black", edge.col = "darkorange", edge.lwd_range = c(1,5), active = T, subset = NULL) {
   # Checks 
   if(!class(SOM)=="Rcpp_SOM") stop("Input SOM must be an object of class SOM")
-  if(!SOM$is_recalled) stop("Must call $recall_SOM before calling vis_som_mUMatrix")
-  if(!any(installed.packages()[,1] == "TopoRNet")) stop("Package TopoRNet not installed, which is required for TopoView visualization")
+  
   #if(!class(TRN)=="Rcpp_TRN") stop("Input TRN must be an object of class TRN from package TopoRNet")
   if(!(nrow(ADJ) == ncol(ADJ))) stop("ADJ must be square")
   if(!(nrow(ADJ) == SOM$nW)) stop("ADJ must have nrows = ncols = SOM$nW")
